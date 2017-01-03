@@ -19,4 +19,7 @@ public class HUD : HUD_Base<HUD> {
     {
         singleton.clipAmmo.text = current + "/" + max;
     }
+
+    
+    
 }
