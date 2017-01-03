@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HUD : HUD_Base {
+public class HUD : HUD_Base<HUD> {
     
 
     public static void SetHealth(int current, int max)

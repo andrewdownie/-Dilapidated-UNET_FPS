@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class HUD_Base : MonoBehaviour {
 
-    public static HUD singleton;
+public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
+
+    public static T singleton;
     private static int instancesCount = 0;
     
 
@@ -42,7 +43,7 @@ public abstract class HUD_Base : MonoBehaviour {
         }
         
         
-        singleton = (HUD)this;
+        singleton = (T)this;
         instancesCount++;
         
         
