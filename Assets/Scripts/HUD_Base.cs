@@ -1,47 +1,30 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEditor;
 
 
 public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
 
     public static T singleton;
 
+    [SerializeField]
+    private bool disableCanvasOnScene0;
 
-    /// 
-    /// GUI Elements
-    /// 
+    [SerializeField]
+    private SceneAsset[] scenesToDisableCanvas;
+    
     protected Canvas canvas;
 
-    protected Text clipAmmo;
-
-
-    protected Text healthText;
-    protected Image healthBar;
-
-
-    protected Text healthPackText;
-    protected Image healthPackImage;
-
-    /// 
-    /// Find GUI Elements
-    /// 
-    private void FindGUIElements()
+    public static void CanvasEnabled(bool enabled)
     {
-        canvas = StaticFunc.FindComponent<Canvas>("Canvas");
-
-        clipAmmo = StaticFunc.FindComponent<Text>("HUD_ClipAmmo");
-
-      
-        healthBar = StaticFunc.FindComponent<Image>("HUD_HealthBar");
-        healthText = StaticFunc.FindComponent<Text>("HUD_HealthText");
-
-
-        healthPackText = StaticFunc.FindComponent<Text>("HUD_HealthPackText");
-        healthPackImage = StaticFunc.FindComponent<Image>("HUD_HealthPackImage");
+        singleton.canvas.enabled = enabled;
     }
 
 
+    /////
+    ///// Unity Events
+    /////
     void Awake()
     {
         if (FindObjectsOfType(typeof(Canvas)).Length > 1)
@@ -51,31 +34,48 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
         }
 
         DontDestroyOnLoad(gameObject);
+        canvas = GetComponent<Canvas>();
     }
-
-
+    
     void Start()
     {
         singleton = (T)this;
-        FindGUIElements();
+        CheckIfCanvasShouldBeDisabled();
     }
 
-
-    public static void CanvasEnabled(bool enabled)
+    void OnLevelWasLoaded()
     {
-        singleton.canvas.enabled = enabled;
+        CheckIfCanvasShouldBeDisabled();
     }
 
 
-    void OnLevelWasLoaded(int level)
+
+    /////
+    ///// Helper Functions
+    /////
+    void CheckIfCanvasShouldBeDisabled()
     {
-        if(level == 0)
+        CanvasEnabled(true);
+
+
+        if (disableCanvasOnScene0)
         {
-            CanvasEnabled(false);
+            if(SceneManager.GetActiveScene().buildIndex == 0)
+            {
+                CanvasEnabled(false);
+                return;
+            }
         }
-        else
+
+        foreach (SceneAsset sa in scenesToDisableCanvas)
         {
-            CanvasEnabled(true);
+            if (SceneManager.GetActiveScene().name == sa.name)
+            {
+                CanvasEnabled(false);
+                return;
+            }
         }
     }
+
+
 }

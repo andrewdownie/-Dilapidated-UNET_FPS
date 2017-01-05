@@ -69,19 +69,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Combat.cs" />
-    <Compile Include="Assets\FloatingItem.cs" />
-    <Compile Include="Assets\HealthPack.cs" />
-    <Compile Include="Assets\I_Health.cs" />
+    <Compile Include="Assets\Scripts\AmmoPickup.cs" />
     <Compile Include="Assets\Scripts\ColorSetup.cs" />
+    <Compile Include="Assets\Scripts\Combat.cs" />
+    <Compile Include="Assets\Scripts\FloatingItem.cs" />
     <Compile Include="Assets\Scripts\Gun.cs" />
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\HUD_Base.cs" />
+    <Compile Include="Assets\Scripts\HealthPack.cs" />
     <Compile Include="Assets\Scripts\LocalSetup.cs" />
     <Compile Include="Assets\Scripts\Net_Manager.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Assets\Scripts\RandomColor.cs" />
-    <Compile Include="Assets\Scripts\Utility Scripts\StaticFunc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />

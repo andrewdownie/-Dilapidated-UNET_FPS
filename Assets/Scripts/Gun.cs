@@ -10,6 +10,9 @@ public class Gun : MonoBehaviour {
     [SerializeField]
     private AudioClip shoot, reload, outOfAmmo;
 
+    [SerializeField]
+    private Combat combat;
+
 
     [SerializeField]
     private int clipSize = 5;
@@ -55,6 +58,11 @@ public class Gun : MonoBehaviour {
                 bulletsInClip -= 1;
                 timeSinceLastShot = 0;
                 HUD.SetClipAmmo(bulletsInClip, clipSize);
+
+                if(bulletsInClip == 0)
+                {
+                    Reload();
+                }
             }
             
         }
@@ -68,10 +76,17 @@ public class Gun : MonoBehaviour {
     {
         if(bulletsInClip < clipSize)
         {
-            audioSource.PlayOneShot(reload);
-            bulletsInClip = clipSize;
-            timeSinceLastShot = -(reload.length - timeBetweenShoots);
-            HUD.SetClipAmmo(bulletsInClip, clipSize);
+            int bulletsFromInventory = combat.RemoveBullets(clipSize - bulletsInClip);
+
+            if(bulletsFromInventory > 0)
+            {
+                audioSource.PlayOneShot(reload);
+                bulletsInClip = clipSize;
+                timeSinceLastShot = -(reload.length - timeBetweenShoots);
+                HUD.SetClipAmmo(bulletsInClip, clipSize);
+            }
+
+           
         }
         
     }

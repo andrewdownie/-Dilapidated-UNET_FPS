@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 
 public class HealthPack : MonoBehaviour {
-    [SerializeField]
-    private float healAmount = 80f;
 
 
     [SerializeField]
@@ -17,7 +15,7 @@ public class HealthPack : MonoBehaviour {
     private AudioSource audioSource;
 
     [SerializeField]
-    private AudioClip healSound;
+    private AudioClip pickupSound;
 
     void OnTriggerEnter(Collider coll)
     {
@@ -25,21 +23,26 @@ public class HealthPack : MonoBehaviour {
         /// TODO: this needs to be changed to add to the players health pack slot if the slot it empty.
         if(coll.tag == "Player")
         {
-            I_Health health = (I_Health)coll.GetComponent<Combat>();
-            health.Heal(healAmount);
-            Destroy(gameObject, healSound.length + 1f);
+            Combat combat = coll.GetComponent<Combat>();
 
-            audioSource.PlayOneShot(healSound);
 
-            foreach(Renderer r in renderers)
+            if (combat.AddHealthPack())
             {
-                r.enabled = false;
-            }
+                Destroy(gameObject, pickupSound.length + 1f);
 
-            foreach(BoxCollider bc in boxColliders)
-            {
-                bc.enabled = false;
+                audioSource.PlayOneShot(pickupSound);
+
+                foreach (Renderer r in renderers)
+                {
+                    r.enabled = false;
+                }
+
+                foreach (BoxCollider bc in boxColliders)
+                {
+                    bc.enabled = false;
+                }
             }
+            
         }
 
 
