@@ -20,6 +20,9 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
     protected Image healthBar;
 
 
+    protected Text healthPackText;
+    protected Image healthPackImage;
+
     /// 
     /// Find GUI Elements
     /// 
@@ -32,6 +35,10 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
       
         healthBar = StaticFunc.FindComponent<Image>("HUD_HealthBar");
         healthText = StaticFunc.FindComponent<Text>("HUD_HealthText");
+
+
+        healthPackText = StaticFunc.FindComponent<Text>("HUD_HealthPackText");
+        healthPackImage = StaticFunc.FindComponent<Image>("HUD_HealthPackImage");
     }
 
 
@@ -51,15 +58,14 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
     {
         singleton = (T)this;
         FindGUIElements();
-        
     }
 
 
     public static void CanvasEnabled(bool enabled)
     {
         singleton.canvas.enabled = enabled;
-
     }
+
 
     void OnLevelWasLoaded(int level)
     {

@@ -23,9 +23,7 @@ public class Gun : MonoBehaviour {
 
     void Start()
     {
-        UpdateBulletsGUI();
-
-        
+        HUD.SetClipAmmo(bulletsInClip, clipSize);
     }
 	
 
@@ -56,7 +54,7 @@ public class Gun : MonoBehaviour {
                 audioSource.PlayOneShot(shoot);
                 bulletsInClip -= 1;
                 timeSinceLastShot = 0;
-                UpdateBulletsGUI();
+                HUD.SetClipAmmo(bulletsInClip, clipSize);
             }
             
         }
@@ -73,15 +71,8 @@ public class Gun : MonoBehaviour {
             audioSource.PlayOneShot(reload);
             bulletsInClip = clipSize;
             timeSinceLastShot = -(reload.length - timeBetweenShoots);
-            UpdateBulletsGUI();
+            HUD.SetClipAmmo(bulletsInClip, clipSize);
         }
         
-    }
-
-    void UpdateBulletsGUI()
-    {
-        //txtClipAmmo.text = "Bullets " + bulletsInClip + "/" + clipSize;
-
-        HUD.SetClipAmmo(bulletsInClip, clipSize);
     }
 }
