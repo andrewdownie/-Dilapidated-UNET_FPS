@@ -31,15 +31,27 @@ public class Zombie : MonoBehaviour {
 	}
 
 
-    public void TakeDamage(float amount, Vector3 hitLocation, Quaternion hitRotation)
+    public void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
     {
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
 
-        if(curHealth == 0)
+        
+
+
+        ParticleSystem ps = (ParticleSystem)Instantiate(bloodSplatter, hitLocation, Quaternion.identity);
+
+        ps.transform.LookAt(bulletPosition);
+
+
+
+        if (curHealth == 0)
         {
             hideGameObject.Hide();
             audioSource.PlayOneShot(zombieDie);
             Destroy(gameObject, 5);
+
+            
+
             Instantiate(deathSplatter, new Vector3(hitLocation.x, 1, hitLocation.z), Quaternion.Euler(-90, 0, 0));
             Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 0, 0));
             Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 90, 0));
@@ -47,7 +59,9 @@ public class Zombie : MonoBehaviour {
             Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 270, 0));
             
         }
-        Instantiate(bloodSplatter, hitLocation, hitRotation);
+
+        
+        
         
 
         

@@ -69,7 +69,7 @@ public class Gun : MonoBehaviour {
                 timeSinceLastShot = 0;
                 HUD.SetClipAmmo(bulletsInClip, clipSize);
 
-                bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<bullet>();
+                Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
                 bullet.transform.position = bulletSpawnPoint.position;
                 bullet.transform.rotation = bulletSpawnPoint.rotation;
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);

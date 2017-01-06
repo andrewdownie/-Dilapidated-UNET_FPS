@@ -30,6 +30,9 @@ public class HUD : HUD_Base<HUD> {
     [SerializeField]
     protected Image bulletInventoryImage;
 
+    [SerializeField]
+    protected Image hitMarker;
+
 
 
 
@@ -67,5 +70,9 @@ public class HUD : HUD_Base<HUD> {
         singleton.bulletInventoryText.text = amount.ToString();
     }
 
+    public static void SetHitMarkerVisible(bool visible)
+    {
+        singleton.hitMarker.enabled = visible;
+    }
 
 }

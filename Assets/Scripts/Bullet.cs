@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class bullet : MonoBehaviour {
+public class Bullet : MonoBehaviour {
 
     [SerializeField]
     private float initialBulletForce = 500;
@@ -10,6 +10,8 @@ public class bullet : MonoBehaviour {
 
     [SerializeField]
     private float bulletDamageAmount = 36;
+
+    bool beingDestroyed;
 
 
     private HitMarkerCallback hitMarkerCallback;
@@ -28,8 +30,12 @@ public class bullet : MonoBehaviour {
     {
         if(collision.transform.tag == "Zombie")
         {
+
+            RaycastHit hit;
+            Physics.Raycast(transform.position + transform.forward * -2, transform.forward, out hit);
+
             Zombie zombie = collision.gameObject.GetComponent<Zombie>();
-            zombie.TakeDamage(bulletDamageAmount, collision.transform.position, Quaternion.Inverse(collision.transform.rotation));
+            zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
 
             hitMarkerCallback.ConfirmHit();
         }
@@ -43,8 +49,9 @@ public class bullet : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if(transform.position.y < 1)
+        if(transform.position.y < 1 && !beingDestroyed)
         {
+            beingDestroyed = true;
             Destroy(gameObject, 120);
         }
     }

@@ -11,12 +11,19 @@ public class HitMarkerCallback : MonoBehaviour {
 
 	void Start () {
         audioSource = GetComponent<AudioSource>();
+        HUD.SetHitMarkerVisible(false);
 	}
 	
     public void ConfirmHit()
     {
         audioSource.PlayOneShot(hitMarkerSound);
-        Debug.Log("Hit marker confimed");
-        //show hit marker gui here
+        StartCoroutine(ShowHideHitMarker());
+    }
+
+    private IEnumerator ShowHideHitMarker()
+    {
+        HUD.SetHitMarkerVisible(true);
+        yield return new WaitForSeconds(0.15f);
+        HUD.SetHitMarkerVisible(false);
     }
 }

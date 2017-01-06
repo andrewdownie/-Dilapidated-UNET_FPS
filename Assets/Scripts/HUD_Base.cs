@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEditor;
 
 
 public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
@@ -10,9 +9,7 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
 
     [SerializeField]
     private bool disableCanvasOnScene0;
-
-    [SerializeField]
-    private SceneAsset[] scenesToDisableCanvas;
+    
     
     protected Canvas canvas;
 
@@ -67,14 +64,6 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
             }
         }
 
-        foreach (SceneAsset sa in scenesToDisableCanvas)
-        {
-            if (SceneManager.GetActiveScene().name == sa.name)
-            {
-                CanvasEnabled(false);
-                return;
-            }
-        }
     }
 
 
