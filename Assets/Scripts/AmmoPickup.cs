@@ -4,10 +4,7 @@ using System.Collections;
 public class AmmoPickup : MonoBehaviour {
 
     [SerializeField]
-    private Renderer[] renderers;
-
-    [SerializeField]
-    private BoxCollider[] boxColliders;
+    private HideGameObject hideGameObject;
 
 
     [SerializeField]
@@ -29,16 +26,7 @@ public class AmmoPickup : MonoBehaviour {
             Destroy(gameObject, pickupSound.length + 1f);
 
             audioSource.PlayOneShot(pickupSound);
-
-            foreach (Renderer r in renderers)
-            {
-                r.enabled = false;
-            }
-
-            foreach (BoxCollider bc in boxColliders)
-            {
-                bc.enabled = false;
-            }
+            hideGameObject.Hide();
 
         }
 

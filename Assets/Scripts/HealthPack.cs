@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 public class HealthPack : MonoBehaviour {
 
-
     [SerializeField]
-    private Renderer[] renderers;
-
-    [SerializeField]
-    private BoxCollider[] boxColliders;
+    private HideGameObject hideGameObject;
 
 
     [SerializeField]
@@ -32,15 +28,7 @@ public class HealthPack : MonoBehaviour {
 
                 audioSource.PlayOneShot(pickupSound);
 
-                foreach (Renderer r in renderers)
-                {
-                    r.enabled = false;
-                }
-
-                foreach (BoxCollider bc in boxColliders)
-                {
-                    bc.enabled = false;
-                }
+                hideGameObject.Hide();
             }
             
         }

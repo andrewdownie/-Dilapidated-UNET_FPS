@@ -77,10 +77,14 @@
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\HUD_Base.cs" />
     <Compile Include="Assets\Scripts\HealthPack.cs" />
+    <Compile Include="Assets\Scripts\HideGameObject.cs" />
+    <Compile Include="Assets\Scripts\HitMarkerCallback.cs" />
     <Compile Include="Assets\Scripts\LocalSetup.cs" />
     <Compile Include="Assets\Scripts\Net_Manager.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Assets\Scripts\RandomColor.cs" />
+    <Compile Include="Assets\Scripts\Zombie.cs" />
+    <Compile Include="Assets\Scripts\bullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />

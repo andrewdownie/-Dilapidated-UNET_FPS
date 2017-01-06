@@ -24,9 +24,19 @@ public class Gun : MonoBehaviour {
     float timeSinceLastShot = 1f;
 
 
+    [SerializeField]
+    private Transform bulletSpawnPoint;
+
+
+    [SerializeField]
+    private GameObject bulletPrefab;
+
+    HitMarkerCallback hitMarkerCallback;
+
     void Start()
     {
         HUD.SetClipAmmo(bulletsInClip, clipSize);
+        hitMarkerCallback = GetComponent<HitMarkerCallback>();
     }
 	
 
@@ -59,10 +69,10 @@ public class Gun : MonoBehaviour {
                 timeSinceLastShot = 0;
                 HUD.SetClipAmmo(bulletsInClip, clipSize);
 
-                if(bulletsInClip == 0)
-                {
-                    Reload();
-                }
+                bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<bullet>();
+                bullet.transform.position = bulletSpawnPoint.position;
+                bullet.transform.rotation = bulletSpawnPoint.rotation;
+                bullet.SetHitMarkerCallBack(hitMarkerCallback);
             }
             
         }
@@ -81,7 +91,7 @@ public class Gun : MonoBehaviour {
             if(bulletsFromInventory > 0)
             {
                 audioSource.PlayOneShot(reload);
-                bulletsInClip = clipSize;
+                bulletsInClip = bulletsFromInventory + bulletsInClip;
                 timeSinceLastShot = -(reload.length - timeBetweenShoots);
                 HUD.SetClipAmmo(bulletsInClip, clipSize);
             }
