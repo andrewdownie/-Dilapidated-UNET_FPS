@@ -17,12 +17,13 @@ public class Zombie : MonoBehaviour {
     [SerializeField]
     private ParticleSystem deathSplatter;
 
-
+    private ZombieAI zombieAI;
     private AudioSource audioSource;
 
 	// Use this for initialization
 	void Start () {
         audioSource = GetComponent<AudioSource>();
+        zombieAI = GetComponent<ZombieAI>();
 	}
 	
 	// Update is called once per frame
@@ -35,7 +36,7 @@ public class Zombie : MonoBehaviour {
     {
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
 
-        
+        zombieAI.GotAttacked();
 
 
         ParticleSystem ps = (ParticleSystem)Instantiate(bloodSplatter, hitLocation, Quaternion.identity);

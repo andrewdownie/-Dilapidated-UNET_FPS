@@ -15,7 +15,11 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
 
     public static void CanvasEnabled(bool enabled)
     {
-        singleton.canvas.enabled = enabled;
+        if(singleton != null)
+        {
+            singleton.canvas.enabled = enabled;
+        }
+        
     }
 
 

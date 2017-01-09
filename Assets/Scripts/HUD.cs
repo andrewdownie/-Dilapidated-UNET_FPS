@@ -7,48 +7,46 @@ public class HUD : HUD_Base<HUD> {
     /////
     ///// GUI Element References
     /////
+    [Header("Ammo")]
     [SerializeField]
-    protected Image clipAmmoImage;
+    Image clipAmmoImage;
     [SerializeField]
-    protected Text clipAmmoText;
+    Text clipAmmoText;
 
-
+    [Header("Health")]
     [SerializeField]
-    protected Text healthText;
+    Text healthText;
     [SerializeField]
-    protected Image healthImage;
+    Image healthImage;
 
-
+    [Header("Health Pack")]
     [SerializeField]
-    protected Text healthPackText;
+    Text healthPackText;
     [SerializeField]
-    protected Image healthPackImage;
+    Image healthPackImage;
 
-
+    [Header("Bullet Inventory")]
     [SerializeField]
-    protected Text bulletInventoryText;
+    Text bulletInventoryText;
     [SerializeField]
-    protected Image bulletInventoryImage;
+    Image bulletInventoryImage;
 
+    [Header("Hit Marker")]
     [SerializeField]
-    protected Image hitMarker;
+    Image hitMarker;
 
-
+    [Header("Dying and respawning")]
+    [SerializeField]
+    Text deathMessage;
+    [SerializeField]
+    Image respawnButton;
+    [SerializeField]
+    Text respawnButtonText;
 
 
     /////
     ///// Public Manipulation Functions
     /////
-
-
-    public static void SetHealth(float current, float max)
-    {
-        singleton.healthImage.enabled = true;
-        float ratio = current / max;
-        singleton.healthImage.fillAmount = ratio;
-        singleton.healthText.text = current + "/" + max;
-    }
-
 
 
     public static void SetClipAmmo(int current, int max)
@@ -58,21 +56,39 @@ public class HUD : HUD_Base<HUD> {
     }
 
 
+    public static void SetHealth(float current, float max)
+    {
+        singleton.healthImage.enabled = true;
+        float ratio = current / max;
+        singleton.healthImage.fillAmount = ratio;
+        singleton.healthText.text = current + "/" + max;
+    }
+    
+
     public static void SetHealthPackVisible(bool visible)
     {
         singleton.healthPackImage.enabled = visible;
         singleton.healthPackText.enabled = visible;
     }
     
+
     public static void SetInventoryBullets(int amount)
     {
         singleton.bulletInventoryImage.enabled = true;
         singleton.bulletInventoryText.text = amount.ToString();
     }
 
+
     public static void SetHitMarkerVisible(bool visible)
     {
         singleton.hitMarker.enabled = visible;
     }
 
+
+    public static void SetRespawnButtonVisible(bool visible)
+    {
+        singleton.deathMessage.enabled = visible;
+        singleton.respawnButton.enabled = visible;
+        singleton.respawnButtonText.enabled = visible;
+    }
 }

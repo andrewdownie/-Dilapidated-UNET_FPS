@@ -9,7 +9,13 @@ public class ZombieAI : MonoBehaviour {
     private LayerMask playerLayerMask;
 
     [SerializeField]
-    private float castRadius = 7;
+    private float baseCastRadius = 7;
+    [SerializeField]
+    private float curiousDuration;
+    [SerializeField]
+    private float curiousRadius; //When the zombie gets shot, and is looking for the player 
+    
+    private float currentCastRadius;
 
     [SerializeField]
     private float moveSpeed = 4;
@@ -23,8 +29,8 @@ public class ZombieAI : MonoBehaviour {
     [SerializeField]
     private AudioClip[] zombieAttackSounds;
 
-    [SerializeField]
-    private Combat target;
+
+    private Player target;
 
 
     private bool readyToAttack;
@@ -39,8 +45,18 @@ public class ZombieAI : MonoBehaviour {
         rigid = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         readyToAttack = true;
+
+        currentCastRadius = baseCastRadius;
 	}
 	
+    public void GotAttacked()
+    {
+        if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering)
+        {
+            StopCoroutine(BecomeCurious());
+            StartCoroutine(BecomeCurious());
+        }
+    }
 
     void Update()
     {
@@ -50,11 +66,11 @@ public class ZombieAI : MonoBehaviour {
         {
             RaycastHit hitInfo;
 
-            Physics.SphereCast(transform.position, castRadius, transform.forward, out hitInfo, castRadius, playerLayerMask);
+            Physics.SphereCast(transform.position, currentCastRadius, transform.forward, out hitInfo, currentCastRadius, playerLayerMask);
 
             if(hitInfo.transform != null)
             {
-                target = hitInfo.transform.gameObject.GetComponent<Combat>();
+                target = hitInfo.transform.gameObject.GetComponent<Player>();
                 aiState = ZombieAIState.chasing;
             }
         }
@@ -67,7 +83,7 @@ public class ZombieAI : MonoBehaviour {
 
             float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
 
-            if (distanceToTarget > castRadius * 1.4f)
+            if (distanceToTarget > currentCastRadius * 1.4f)
             {
                 aiState = ZombieAIState.idle;
             }
@@ -92,6 +108,13 @@ public class ZombieAI : MonoBehaviour {
         readyToAttack = false;
         yield return new WaitForSeconds(attackSpeed);
         readyToAttack = true;
+    }
+
+    IEnumerator BecomeCurious()
+    {
+        currentCastRadius = curiousRadius;
+        yield return new WaitForSeconds(curiousDuration);
+        currentCastRadius = baseCastRadius;
     }
 }
 

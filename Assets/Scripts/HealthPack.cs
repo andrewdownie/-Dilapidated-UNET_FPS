@@ -19,7 +19,7 @@ public class HealthPack : MonoBehaviour {
         /// TODO: this needs to be changed to add to the players health pack slot if the slot it empty.
         if(coll.tag == "Player")
         {
-            Combat combat = coll.GetComponent<Combat>();
+            Player combat = coll.GetComponent<Player>();
 
 
             if (combat.AddHealthPack())

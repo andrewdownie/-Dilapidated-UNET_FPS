@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Combat : MonoBehaviour {
+public class Player : MonoBehaviour {
 
     [SerializeField]
     private float curHealth = 100;
@@ -13,7 +13,7 @@ public class Combat : MonoBehaviour {
 
 
     [SerializeField]
-    private int inventoryBullets = 30;
+    private int inventoryBullets = 100;
 
 
     [SerializeField]
@@ -26,6 +26,15 @@ public class Combat : MonoBehaviour {
         HUD.SetHealth(curHealth, maxHealth);
         HUD.SetHealthPackVisible(hasHealthPack);
         HUD.SetInventoryBullets(inventoryBullets);
+
+        if(curHealth == 0)
+        {
+            HUD.SetRespawnButtonVisible(true);
+        }
+        else
+        {
+            HUD.SetRespawnButtonVisible(false);
+        }
 
 
         audioSource = GetComponent<AudioSource>();
@@ -63,7 +72,7 @@ public class Combat : MonoBehaviour {
 
         if(curHealth == 0)
         {
-            Debug.Log(" U    R    D E D");
+            HUD.SetRespawnButtonVisible(true);
         }
     }
 
