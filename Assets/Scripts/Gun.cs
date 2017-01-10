@@ -57,14 +57,35 @@ public class Gun : MonoBehaviour {
         {
             mouseAction = Input.GetKeyDown;
         }
-
         
-        //TODO: this does not work
-        player = transform.parent.parent.parent.gameObject.GetComponent<Player>();
-        Debug.Log(transform.parent.parent.parent.gameObject.name);
-        if (player == null)
+        FindPlayerScript();
+
+
+    }
+
+    void FindPlayerScript()
+    {
+        Transform current = transform.parent;
+
+        if(current == null)
         {
-            Debug.Log(player.name);
+            enabled = false;
+            return;
+        }
+
+
+
+        while(current != null)
+        {
+            Player p = current.GetComponent<Player>();
+
+            if(p != null)
+            {
+                player = p;
+                return;
+            }
+
+            current = current.parent;
         }
 
 
@@ -124,7 +145,7 @@ public class Gun : MonoBehaviour {
 
     void Reload()
     {
-        if(bulletsInClip < clipSize)
+        if(bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
         {
             int bulletsFromInventory = player.RemoveBullets(clipSize - bulletsInClip);
 
