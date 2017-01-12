@@ -2,11 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Gun : MonoBehaviour {
-
-    [Header("Auto filled")]
-    [SerializeField]
+public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gun? transfer ownership on pickup?
     private Player player;
+    private WeaponSlot weaponSlot;
 
     [Header("Sound")]
     [SerializeField]
@@ -44,6 +42,8 @@ public class Gun : MonoBehaviour {
 
     HitMarkerCallback hitMarkerCallback;
 
+    bool canBePickedUp = false;
+
     void Start()
     {
         HUD.SetClipAmmo(bulletsInClip, clipSize);
@@ -58,37 +58,35 @@ public class Gun : MonoBehaviour {
             mouseAction = Input.GetKeyDown;
         }
         
-        FindPlayerScript();
+        FindWeaponSlotAndPlayer();
 
 
     }
 
-    void FindPlayerScript()
+    void FindWeaponSlotAndPlayer()
     {
-        Transform current = transform.parent;
+        Transform parent = transform.parent;
 
-        if(current == null)
+        if(parent == null)
         {
             enabled = false;
             return;
         }
 
+        WeaponSlot weaponSlot = parent.GetComponent<WeaponSlot>();
 
-
-        while(current != null)
+        if(weaponSlot != null)
         {
-            Player p = current.GetComponent<Player>();
+            this.weaponSlot = weaponSlot;
 
-            if(p != null)
+            Player player = weaponSlot.Player;
+
+            if(player != null)
             {
-                player = p;
-                return;
+                this.player = player;
             }
-
-            current = current.parent;
         }
-
-
+        
     }
 	
 
@@ -161,6 +159,66 @@ public class Gun : MonoBehaviour {
         }
         
     }
+
+    public void DropGun()
+    {
+        enabled = false;
+
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = true;
+
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider c in colliders)
+        {
+            c.enabled = true;
+        }
+
+        StartCoroutine(DropGunTimer());
+    }
+
+    void OnTriggerEnter(Collider coll)
+    {
+        if (coll.tag == "Player" && player == null)
+        {
+            Debug.Log("Collided with: " + coll.name);
+
+            Player _player = coll.GetComponent<Player>();
+            if (_player != null)
+            {
+                WeaponSlot _weaponSlot = _player.GetComponentInChildren<WeaponSlot>();
+
+                if (_weaponSlot != null)
+                {
+                    player = _player;
+                    weaponSlot = _weaponSlot;
+                    gameObject.transform.parent = _weaponSlot.transform;
+
+                    Destroy(GetComponent<Rigidbody>());
+                    enabled = true;
+
+                    Collider[] colliders = GetComponents<Collider>();
+                    foreach (Collider c in colliders)
+                    {
+                        c.enabled = false;
+                    }
+
+                    transform.localPosition = Vector3.zero;
+                    transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+                }
+            }
+
+        }
+    }
+
+    IEnumerator DropGunTimer(){
+        yield return new WaitForSeconds(1.3f);
+        player = null;
+        weaponSlot = null;
+    } 
+
+
+    
 }
 
 

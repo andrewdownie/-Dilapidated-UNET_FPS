@@ -15,14 +15,12 @@ public class AmmoPickup : MonoBehaviour {
 
     void OnTriggerEnter(Collider coll)
     {
-
-        /// TODO: this needs to be changed to add to the players health pack slot if the slot it empty.
         if (coll.tag == "Player")
         {
-            Player combat = coll.GetComponent<Player>();
+            Player player = coll.GetComponent<Player>();
 
 
-            combat.AddAmmoPack();
+            player.AddAmmoPack();
             Destroy(gameObject, pickupSound.length + 1f);
 
             audioSource.PlayOneShot(pickupSound);
