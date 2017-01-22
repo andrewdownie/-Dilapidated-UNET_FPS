@@ -41,8 +41,7 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
     private ParticleSystem muzzleFlash;
 
     HitMarkerCallback hitMarkerCallback;
-
-    bool canBePickedUp = false;
+    
 
     void Start()
     {
