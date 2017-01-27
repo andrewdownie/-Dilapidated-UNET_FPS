@@ -8,21 +8,23 @@ public class WeaponSlot : MonoBehaviour {
     [SerializeField]
     private KeyCode dropWeaponKey = KeyCode.E;
 
+    [SerializeField]
+    private Gun currentlyEquippedGun;
+
 	// Use this for initialization
 	void Start () {
-	
-	}
+        currentlyEquippedGun = GetComponentInChildren<Gun>();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(dropWeaponKey))
         {
-            Gun gun = GetComponentInChildren<Gun>();
-
-            if(gun != null)
+            if(currentlyEquippedGun != null)
             {
-                gun.transform.parent = null;
-                gun.DropGun();
+                currentlyEquippedGun.transform.parent = null;
+                currentlyEquippedGun.DropGun();
             }
         }
 	}

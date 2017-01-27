@@ -192,7 +192,7 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
                     weaponSlot = _weaponSlot;
                     gameObject.transform.parent = _weaponSlot.transform;
 
-                    Destroy(GetComponent<Rigidbody>());
+                    Destroy(GetComponent<Rigidbody>());//Why do I destroy rigidbody and disable colliders?
                     enabled = true;
 
                     Collider[] colliders = GetComponents<Collider>();
