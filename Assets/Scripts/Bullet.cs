@@ -10,8 +10,8 @@ public class Bullet : MonoBehaviour {
     [SerializeField][Range(0, float.MaxValue)]
     private float accuracyModifier = 0.5f;
 
-    [SerializeField]
-    private LayerMask layerMask;
+   // [SerializeField]
+    //private LayerMask layerMask;
 
     [SerializeField]
     private float bulletDamageAmount = 36;

@@ -33,9 +33,15 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
     [Header("Other Setup")]
     [SerializeField]
     private Transform bulletSpawnPoint;
+
+    [SerializeField]
+    private Transform shellSpawnPoint;
     
     [SerializeField]
     private GameObject bulletPrefab;
+
+    [SerializeField]
+    private GameObject shellPrefab;
 
     [SerializeField]
     private ParticleSystem muzzleFlash;
@@ -116,19 +122,27 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
             if (bulletsInClip > 0)
             {
             
-                    audioSource.PlayOneShot(shoot);
-                    bulletsInClip -= 1;
-                    HUD.SetClipAmmo(bulletsInClip, clipSize);
+                ///
+                /// Create the bullet
+                ///
+                audioSource.PlayOneShot(shoot);
+                bulletsInClip -= 1;
+                HUD.SetClipAmmo(bulletsInClip, clipSize);
 
-                    Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
-                    bullet.transform.position = bulletSpawnPoint.position;
-                    bullet.transform.rotation = bulletSpawnPoint.rotation;
-                    bullet.SetHitMarkerCallBack(hitMarkerCallback);
+                Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
+                bullet.transform.position = bulletSpawnPoint.position;
+                bullet.transform.rotation = bulletSpawnPoint.rotation;
+                bullet.SetHitMarkerCallBack(hitMarkerCallback);
 
-                    Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
-                    t.position = bulletSpawnPoint.position;
-                    t.rotation = bulletSpawnPoint.rotation;
-                    t.parent = bulletSpawnPoint;
+                Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
+                t.position = bulletSpawnPoint.position;
+                t.rotation = bulletSpawnPoint.rotation;
+                t.parent = bulletSpawnPoint;
+
+                ///
+                /// Create the shell
+                ///
+                Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation);
            
             
             }

@@ -97,9 +97,10 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Assets\Scripts\RandomColor.cs" />
+    <Compile Include="Assets\Scripts\WeaponSlot.cs" />
     <Compile Include="Assets\Scripts\Zombie.cs" />
     <Compile Include="Assets\Scripts\ZombieAI.cs" />
-    <Compile Include="Assets\WeaponSlot.cs" />
+    <Compile Include="Assets\Shell.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
