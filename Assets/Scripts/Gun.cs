@@ -98,6 +98,8 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
 
 	// Update is called once per frame
 	void Update () {
+        AlignGun();
+
         if (mouseAction(KeyCode.Mouse0))
         {
             Shoot();  
@@ -230,6 +232,15 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
         weaponSlot = null;
     } 
 
+    void AlignGun(){
+        if(player != null){
+            Transform target = transform.parent.parent;
+            Vector3 point = target.position + (target.forward * 10);
+            
+            transform.LookAt(point);
+            transform.Rotate(new Vector3(0, 90, 0));
+        }
+    }
 
     
 }

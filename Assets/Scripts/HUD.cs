@@ -43,6 +43,9 @@ public class HUD : HUD_Base<HUD> {
     [SerializeField]
     Text respawnButtonText;
 
+    [Header("Aimer")]
+    Image aimer;
+
 
     /////
     ///// Public Manipulation Functions
@@ -90,5 +93,10 @@ public class HUD : HUD_Base<HUD> {
         singleton.deathMessage.enabled = visible;
         singleton.respawnButton.enabled = visible;
         singleton.respawnButtonText.enabled = visible;
+    }
+
+    public static void SetAimerVisible(bool visible)
+    {
+        singleton.aimer.enabled = visible;
     }
 }
