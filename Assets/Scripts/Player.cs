@@ -15,6 +15,9 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private int inventoryBullets = 100;
 
+    [SerializeField]
+    private AmmoInventory ammo;
+
 
     [SerializeField]
     private AudioClip healSound;

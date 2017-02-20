@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gun? transfer ownership on pickup?
     private Player player;
-    private WeaponSlot weaponSlot;
+    private GunSlot weaponSlot;
 
     [Header("Sound")]
     [SerializeField]
@@ -78,7 +78,7 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
             return;
         }
 
-        WeaponSlot weaponSlot = parent.GetComponent<WeaponSlot>();
+        GunSlot weaponSlot = parent.GetComponent<GunSlot>();
 
         if(weaponSlot != null)
         {
@@ -200,7 +200,7 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
             Player _player = coll.GetComponent<Player>();
             if (_player != null)
             {
-                WeaponSlot _weaponSlot = _player.GetComponentInChildren<WeaponSlot>();
+                GunSlot _weaponSlot = _player.GetComponentInChildren<GunSlot>();
 
                 if (_weaponSlot != null)
                 {
