@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +8,23 @@ public class AmmoInventory : MonoBehaviour {
 
     public Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
 
-    public int GetAmmo(GunType type){
+    public int GetAmmoCount(GunType type){
         return bullets[type];
+    }
+
+
+    void Start(){
+        Array types = Enum.GetValues(typeof(GunType));
+        
+        if(types.Length != bullets.Count){
+            foreach(GunType wt in types){
+                if (bullets.ContainsKey(wt) == false)
+                {
+                    bullets.Add(wt, 0);
+                }
+            }
+        }
+        
     }
 
     public void AddAmmo(int amount, GunType type){
@@ -18,10 +33,10 @@ public class AmmoInventory : MonoBehaviour {
         }
     }
 
-    public int RemoveAmmo(int amount, GunType type){
-        if(bullets[type] >= amount){
-            bullets[type] -= amount;
-            return amount;
+    public int RequestAmmo(int amountRequested, GunType type){
+        if(bullets[type] >= amountRequested){
+            bullets[type] -= amountRequested;
+            return amountRequested;
         }
 
         int amountAvailable = bullets[type];

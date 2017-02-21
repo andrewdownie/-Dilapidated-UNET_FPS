@@ -7,4 +7,6 @@ public abstract class Gun_Base : MonoBehaviour {
 	public abstract void Reload();
 
 	public abstract void Shoot();	
+
+	public abstract GunType GetGunType();
 }

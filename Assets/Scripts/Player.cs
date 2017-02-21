@@ -5,15 +5,15 @@ using System;
 public class Player : MonoBehaviour {
 
     [SerializeField]
-    private float curHealth = 100;
+    private Vitals_Base vitals;
+
     [SerializeField]
     private float maxHealth = 200;
     [SerializeField]
     private bool hasHealthPack;
 
 
-    [SerializeField]
-    private int inventoryBullets = 100;
+
 
     [SerializeField]
     private AmmoInventory ammo;
@@ -25,58 +25,32 @@ public class Player : MonoBehaviour {
 
     private AudioSource audioSource;
 
+
     void Start () {
-        HUD.SetHealth(curHealth, maxHealth);
-        HUD.SetHealthPackVisible(hasHealthPack);
-        HUD.SetInventoryBullets(inventoryBullets);
-
-        if(curHealth == 0)
-        {
-            HUD.SetRespawnButtonVisible(true);
-        }
-        else
-        {
-            HUD.SetRespawnButtonVisible(false);
-        }
-
-
-        audioSource = GetComponent<AudioSource>();
+        
 	}
 
 
-    public void AddBullets(int bullets)
+    public void AddAmmo(int amount, GunType gunType)
     {
-        if(bullets > 0)
-        {
-            inventoryBullets += bullets;
-            HUD.SetInventoryBullets(inventoryBullets);
-        }
+        ammo.AddAmmo(amount, gunType);
+        HUD.SetInventoryBullets(ammo.GetAmmoCount(gunType));
     }
 
-    public int RemoveBullets(int amountRequested)
+    public int RequestAmmo(int amountRequested, GunType gunType)
     {
-        if(amountRequested <= inventoryBullets)
-        {
-            inventoryBullets -= amountRequested;
-            HUD.SetInventoryBullets(inventoryBullets);
-            return amountRequested;
-        }
+        int amountReturned = ammo.RequestAmmo(amountRequested, gunType);
+        HUD.SetInventoryBullets(ammo.GetAmmoCount(gunType));
+        return amountReturned;
+    }
 
-        int amountAvailable = inventoryBullets;
-        inventoryBullets = 0;
-        HUD.SetInventoryBullets(0);
-        return amountAvailable;
+    public int GetAmmoCount(GunType gunType){
+        return ammo.GetAmmoCount(gunType);
     }
 	
     public void ChangeHealth(float amount)
     {
-        curHealth = Mathf.Clamp(curHealth + amount, 0, maxHealth);
-        HUD.SetHealth(curHealth, maxHealth);
-
-        if(curHealth == 0)
-        {
-            HUD.SetRespawnButtonVisible(true);
-        }
+        vitals.ChangeHealth(amount);
     }
 
     /// <summary>
@@ -99,8 +73,8 @@ public class Player : MonoBehaviour {
 
     public void AddAmmoPack()
     {
-        inventoryBullets += 8;
-        HUD.SetInventoryBullets(inventoryBullets);
+        ammo.AddAmmo(8, GunType.pistol);
+        //TODO: need to update HUD here, but need to know what gun is equiped
     }
 
 
@@ -108,13 +82,7 @@ public class Player : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            if (hasHealthPack && curHealth < maxHealth)
-            {
-                hasHealthPack = false;
-                ChangeHealth(80);
-                audioSource.PlayOneShot(healSound);
-                HUD.SetHealthPackVisible(false);
-            }
+            vitals.UseHealthpack();
         }
     }
 }

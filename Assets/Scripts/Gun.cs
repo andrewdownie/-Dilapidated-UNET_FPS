@@ -2,9 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gun? transfer ownership on pickup?
+public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? transfer ownership on pickup?
+    [SerializeField]
+    private GunType gunType;
+
     private Player player;
-    private GunSlot weaponSlot;
+    private GunSlot gunSlot;
 
     [Header("Sound")]
     [SerializeField]
@@ -82,7 +85,7 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
 
         if(weaponSlot != null)
         {
-            this.weaponSlot = weaponSlot;
+            this.gunSlot = weaponSlot;
 
             Player player = weaponSlot.Player;
 
@@ -115,8 +118,75 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
 	}
 
 
-    void Shoot()
+    public void DropGun()
     {
+        enabled = false;
+
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = true;
+
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider c in colliders)
+        {
+            c.enabled = true;
+        }
+
+        StartCoroutine(DropGunTimer());
+    }
+
+    void OnTriggerEnter(Collider coll)
+    {
+        if (coll.tag == "Player" && player == null)
+        {
+            Debug.Log("Collided with: " + coll.name);
+
+            Player _player = coll.GetComponent<Player>();
+            if (_player != null)
+            {
+                GunSlot _weaponSlot = _player.GetComponentInChildren<GunSlot>();
+
+                if (_weaponSlot != null)
+                {
+                    player = _player;
+                    gunSlot = _weaponSlot;
+                    gameObject.transform.parent = _weaponSlot.transform;
+
+                    Destroy(GetComponent<Rigidbody>());//Why do I destroy rigidbody and disable colliders?
+                    enabled = true;
+
+                    Collider[] colliders = GetComponents<Collider>();
+                    foreach (Collider c in colliders)
+                    {
+                        c.enabled = false;
+                    }
+
+                    transform.localPosition = Vector3.zero;
+                    transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+                }
+            }
+
+        }
+    }
+
+    IEnumerator DropGunTimer(){
+        yield return new WaitForSeconds(1.3f);
+        player = null;
+        gunSlot = null;
+    } 
+
+    void AlignGun(){
+        if(player != null){
+            Transform target = transform.parent.parent;
+            Vector3 point = target.position + (target.forward * 10);
+            
+            transform.LookAt(point);
+            transform.Rotate(new Vector3(0, 90, 0));
+        }
+    }
+
+    public override void Shoot(){
+
         if (timeSinceLastShot >= timeBetweenShoots)
         {
             timeSinceLastShot = 0;
@@ -156,11 +226,11 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
         }
     }
 
-    void Reload()
-    {
+    public override void Reload(){
+
         if(bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
         {
-            int bulletsFromInventory = player.RemoveBullets(clipSize - bulletsInClip);
+            int bulletsFromInventory = player.RequestAmmo(clipSize - bulletsInClip, gunType);
 
             if(bulletsFromInventory > 0)
             {
@@ -172,74 +242,10 @@ public class Gun : MonoBehaviour {//TODO: need to check who actually owns the gu
 
            
         }
-        
     }
 
-    public void DropGun()
-    {
-        enabled = false;
-
-        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider c in colliders)
-        {
-            c.enabled = true;
-        }
-
-        StartCoroutine(DropGunTimer());
-    }
-
-    void OnTriggerEnter(Collider coll)
-    {
-        if (coll.tag == "Player" && player == null)
-        {
-            Debug.Log("Collided with: " + coll.name);
-
-            Player _player = coll.GetComponent<Player>();
-            if (_player != null)
-            {
-                GunSlot _weaponSlot = _player.GetComponentInChildren<GunSlot>();
-
-                if (_weaponSlot != null)
-                {
-                    player = _player;
-                    weaponSlot = _weaponSlot;
-                    gameObject.transform.parent = _weaponSlot.transform;
-
-                    Destroy(GetComponent<Rigidbody>());//Why do I destroy rigidbody and disable colliders?
-                    enabled = true;
-
-                    Collider[] colliders = GetComponents<Collider>();
-                    foreach (Collider c in colliders)
-                    {
-                        c.enabled = false;
-                    }
-
-                    transform.localPosition = Vector3.zero;
-                    transform.localRotation = Quaternion.Euler(0, 180, 0);
-
-                }
-            }
-
-        }
-    }
-
-    IEnumerator DropGunTimer(){
-        yield return new WaitForSeconds(1.3f);
-        player = null;
-        weaponSlot = null;
-    } 
-
-    void AlignGun(){
-        if(player != null){
-            Transform target = transform.parent.parent;
-            Vector3 point = target.position + (target.forward * 10);
-            
-            transform.LookAt(point);
-            transform.Rotate(new Vector3(0, 90, 0));
-        }
+    public override GunType GetGunType(){
+        return gunType;
     }
 
     

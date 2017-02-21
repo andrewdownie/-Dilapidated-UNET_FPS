@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GunSlot : MonoBehaviour {
+public class GunSlot : GunSlot_Base {
     [SerializeField]
     private Player player;
 
@@ -9,25 +9,46 @@ public class GunSlot : MonoBehaviour {
     private KeyCode dropWeaponKey = KeyCode.E;
 
     [SerializeField]
-    private Gun currentlyEquippedGun;
+    private Gun_Base primaryWeapon;
+    
+    [SerializeField]
+    private Gun_Base secondaryWeapon;
 
 	// Use this for initialization
 	void Start () {
-        currentlyEquippedGun = GetComponentInChildren<Gun>();
+        primaryWeapon = GetComponentInChildren<Gun_Base>();
 
+        HUD.SetInventoryBullets(player.GetAmmoCount(secondaryWeapon.GetGunType()));
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(dropWeaponKey))
         {
-            if(currentlyEquippedGun != null)
+            if(primaryWeapon != null)
             {
-                currentlyEquippedGun.transform.parent = null;
-                currentlyEquippedGun.DropGun();
+                primaryWeapon.transform.parent = null;
+                //TODO: make the slot drop the gun
+                //currentlyEquippedGun.Drop();
             }
         }
 	}
+
+    public override void Drop(){
+
+    }
+
+    public override bool TryPickup(Gun_Base gun){
+        return false;
+    }
+
+    public override void PreviousWeapon(){
+
+    }
+
+    public override void NextWeapon(){
+
+    }
 
 
     public Player Player
