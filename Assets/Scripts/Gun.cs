@@ -103,16 +103,13 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 	void Update () {
         AlignGun();
 
+        //TODO: this should be handled in the player class, but how to handle automatic / single fire 
+        //      from that level?
         if (mouseAction(KeyCode.Mouse0))
         {
             Shoot();  
         }
 
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Reload();
-        }
 
         timeSinceLastShot += Time.deltaTime;
 	}
@@ -227,10 +224,11 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
     }
 
     public override void Reload(){
+        
 
         if(bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
         {
-            int bulletsFromInventory = player.RequestAmmo(clipSize - bulletsInClip, gunType);
+            int bulletsFromInventory = player.Ammo.Request(clipSize - bulletsInClip, gunType);
 
             if(bulletsFromInventory > 0)
             {

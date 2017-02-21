@@ -2,79 +2,45 @@
 using System.Collections;
 using System;
 
-public class Player : MonoBehaviour {
+
+/// <summary>
+/// The player class has three main responsibilities.
+///     1. Act as a centralized organizer of all the components that make up a player (vitals, gunslot, ect.) 
+///     2. Act as an interface for picking items up in the world.
+///     3. Handle user input (in the update method)
+/// </summary>
+public class Player : Player_Base {
 
     [SerializeField]
     private Vitals_Base vitals;
 
     [SerializeField]
-    private float maxHealth = 200;
-    [SerializeField]
-    private bool hasHealthPack;
-
-
-
+    private GunSlot_Base gunSlot;
 
     [SerializeField]
     private AmmoInventory ammo;
 
 
-    [SerializeField]
-    private AudioClip healSound;
-
-
-    private AudioSource audioSource;
-
-
-    void Start () {
-        
-	}
-
-
-    public void AddAmmo(int amount, GunType gunType)
-    {
-        ammo.AddAmmo(amount, gunType);
-        HUD.SetInventoryBullets(ammo.GetAmmoCount(gunType));
+    public override Vitals_Base Vitals{
+        get{return vitals;}
     }
 
-    public int RequestAmmo(int amountRequested, GunType gunType)
-    {
-        int amountReturned = ammo.RequestAmmo(amountRequested, gunType);
-        HUD.SetInventoryBullets(ammo.GetAmmoCount(gunType));
-        return amountReturned;
+    public override GunSlot_Base GunSlot{
+        get{return gunSlot;}
     }
 
-    public int GetAmmoCount(GunType gunType){
-        return ammo.GetAmmoCount(gunType);
-    }
-	
-    public void ChangeHealth(float amount)
-    {
-        vitals.ChangeHealth(amount);
+    public override AmmoInventory Ammo{
+        get{return ammo;}
     }
 
-    /// <summary>
-    /// Adds a health pack for the player to use.
-    /// </summary>
-    /// <returns>True if the health pack was taken.</returns>
-    public bool AddHealthPack()
+    public override void PickupAmmo(int amount, GunType gunType)
     {
-        if (hasHealthPack)
-        {
-            return false;
-        }
-
-
-        HUD.SetHealthPackVisible(true);
-        hasHealthPack = true;
-        return true;
+        ammo.Add(amount, gunType);
+        gunSlot.UpdateAmmoHUD();
     }
 
-
-    public void AddAmmoPack()
-    {
-        ammo.AddAmmo(8, GunType.pistol);
-        //TODO: need to update HUD here, but need to know what gun is equiped
+    public override bool TryPickupGun(Gun_Base gun){
+        return gunSlot.TryPickup(gun);
     }
 
 
@@ -83,6 +49,19 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.H))
         {
             vitals.UseHealthpack();
+        }
+
+        if(Input.GetKeyDown(KeyCode.E)){
+            gunSlot.Drop();
+        }
+
+
+        if(Input.GetKeyDown(KeyCode.R)){
+            gunSlot.Reload();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Q)){
+            gunSlot.NextWeapon();
         }
     }
 }

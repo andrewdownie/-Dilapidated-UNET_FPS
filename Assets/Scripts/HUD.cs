@@ -75,7 +75,7 @@ public class HUD : HUD_Base<HUD> {
     }
     
 
-    public static void SetInventoryBullets(int amount)
+    public static void SetInventoryAmmo(int amount)
     {
         singleton.bulletInventoryImage.enabled = true;
         singleton.bulletInventoryText.text = amount.ToString();

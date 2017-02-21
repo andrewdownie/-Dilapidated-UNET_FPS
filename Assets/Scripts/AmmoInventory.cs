@@ -8,7 +8,7 @@ public class AmmoInventory : MonoBehaviour {
 
     public Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
 
-    public int GetAmmoCount(GunType type){
+    public int Count(GunType type){
         return bullets[type];
     }
 
@@ -27,13 +27,13 @@ public class AmmoInventory : MonoBehaviour {
         
     }
 
-    public void AddAmmo(int amount, GunType type){
+    public void Add(int amount, GunType type){
         if(amount > 0){
             bullets[type] += amount;
         }
     }
 
-    public int RequestAmmo(int amountRequested, GunType type){
+    public int Request(int amountRequested, GunType type){
         if(bullets[type] >= amountRequested){
             bullets[type] -= amountRequested;
             return amountRequested;

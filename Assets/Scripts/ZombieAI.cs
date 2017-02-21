@@ -103,7 +103,7 @@ public class ZombieAI : MonoBehaviour {
 
     IEnumerator Attack()
     {
-        target.ChangeHealth(attackDamage);
+        target.Vitals.ChangeHealth(attackDamage);
         PlayAttackSound();
         readyToAttack = false;
         yield return new WaitForSeconds(attackSpeed);

@@ -28,5 +28,18 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	/// </summary>
 	public abstract void NextWeapon();
 
-	
+	/// <summary>
+	/// Updates the ammo HUD, used when the player picks up ammo to their inventory.
+	/// </summary>
+	public abstract void UpdateAmmoHUD();	
+
+	/// <summary>
+	/// Reloads the currently equipped weapon.
+	/// </summary>
+	public abstract void Reload();
+
+	/// <summary>
+	/// Shoots the currently equipped weapon.
+	/// </summary>	
+	public abstract void Shoot();
 }

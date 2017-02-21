@@ -22,7 +22,7 @@ public class HealthPack : MonoBehaviour {
             Player combat = coll.GetComponent<Player>();
 
 
-            if (combat.AddHealthPack())
+            if (combat.Vitals.AddHealthpack())
             {
                 Destroy(gameObject, pickupSound.length + 1f);
 
