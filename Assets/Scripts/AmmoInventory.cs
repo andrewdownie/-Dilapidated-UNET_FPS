@@ -6,32 +6,41 @@ using UnityEngine;
 public class AmmoInventory : MonoBehaviour {
 
 
-    public Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
+    
+    private Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
+
+    [SerializeField]
+    int sniper, pistol, shotgun, assualtRifle, smg;
+
+
+
+
+    void Start(){
+        bullets = new Dictionary<GunType, int>();
+
+        //TODO: custom unity inspector gui applied to a dictionary (unsupported by unity), 
+        //      does not remember the values entered (values get forgotten at runtime)
+        //TODO: this way is actually not bad, requiring only three lines of code to be added for a new
+        //      weapon / ammo type to be setup: the Weapon type enum, the above serializedfield and
+        //      the below add to dictionary.
+        bullets.Add(GunType.sniper, sniper);
+        bullets.Add(GunType.pistol, pistol);
+        bullets.Add(GunType.assaultRifle, assualtRifle);
+        bullets.Add(GunType.smg, smg);
+        bullets.Add(GunType.shotgun, shotgun);
+    }
 
     public int Count(GunType type){
         return bullets[type];
     }
 
 
-    void Start(){
-        Array types = Enum.GetValues(typeof(GunType));
-        
-        if(types.Length != bullets.Count){
-            foreach(GunType wt in types){
-                if (bullets.ContainsKey(wt) == false)
-                {
-                    bullets.Add(wt, 0);
-                }
-            }
-        }
-        
-    }
-
     public void Add(int amount, GunType type){
         if(amount > 0){
             bullets[type] += amount;
         }
     }
+
 
     public int Request(int amountRequested, GunType type){
         if(bullets[type] >= amountRequested){
