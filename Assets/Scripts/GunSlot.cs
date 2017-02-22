@@ -16,21 +16,33 @@ public class GunSlot : GunSlot_Base {
 
 	// Use this for initialization
 	void Start () {
-        //primaryWeapon = GetComponentInChildren<Gun_Base>();
-        equippedWeapon = secondaryWeapon;
+        primaryWeapon.gameObject.SetActive(false);
+        secondaryWeapon.gameObject.SetActive(false);
 
+        if(primaryWeapon != null){
+            equippedWeapon = primaryWeapon;
+        }
+        else{
+            equippedWeapon = secondaryWeapon;
+        }
+        equippedWeapon.gameObject.SetActive(true);        
 
-        HUD.SetInventoryAmmo(player.Ammo.Count(secondaryWeapon.GetGunType()));
+        UpdateAmmoHUD();
     }
 	
     public override void Drop(){
-        Debug.Log("Drop gun pls");
         if(primaryWeapon != null && equippedWeapon != secondaryWeapon)
         {
+            equippedWeapon = secondaryWeapon;
+            secondaryWeapon.gameObject.SetActive(true);
+            UpdateAmmoHUD();
+
             primaryWeapon.transform.parent = null;
-            //TODO: make the slot drop the gun
-            //currentlyEquippedGun.Drop();
+            primaryWeapon.Drop();
+            primaryWeapon = null;
         }
+
+        UpdateAmmoHUD();
     }
 
     public override bool TryPickup(Gun_Base gun){
@@ -39,28 +51,34 @@ public class GunSlot : GunSlot_Base {
 
     public override void PreviousWeapon(){
         Debug.Log("Previous weapon");
-        //Since there are only two weapons in this setup, next / prev weapon is just a toggle
-        if(equippedWeapon == primaryWeapon){
-            equippedWeapon = secondaryWeapon;
-        }
-        else{
-            equippedWeapon = primaryWeapon;
-        }
+        ToggleEquip();
     }
 
     public override void NextWeapon(){
         Debug.Log("Next weapon");
-        //Since there are only two weapons in this setup, next / prev weapon is just a toggle
+        ToggleEquip();
+    }
+
+    private void ToggleEquip(){
+        if(primaryWeapon == null){
+            return;
+        }
+
+        equippedWeapon.gameObject.SetActive(false);
         if(equippedWeapon == primaryWeapon){
             equippedWeapon = secondaryWeapon;
         }
         else{
             equippedWeapon = primaryWeapon;
         }
+        equippedWeapon.gameObject.SetActive(true);
+        UpdateAmmoHUD();
     }
+
 
     public override void UpdateAmmoHUD(){
         HUD.SetInventoryAmmo(player.Ammo.Count(equippedWeapon.GetGunType()));
+        HUD.SetClipAmmo(equippedWeapon.BulletsInClip, equippedWeapon.ClipSize);
     }
 
 
@@ -71,11 +89,12 @@ public class GunSlot : GunSlot_Base {
 
     public override void Reload(){
         equippedWeapon.Reload();
-        HUD.SetInventoryAmmo(player.Ammo.Count(equippedWeapon.GetGunType()));
+        UpdateAmmoHUD();
     }
+
 
     public override void Shoot(){
         equippedWeapon.Shoot();
-        Debug.Log("Shoot pls");
+        UpdateAmmoHUD();
     }
 }

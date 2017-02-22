@@ -54,7 +54,6 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 
     void Start()
     {
-        HUD.SetClipAmmo(bulletsInClip, clipSize);
         hitMarkerCallback = GetComponent<HitMarkerCallback>();
         
         if (automatic)
@@ -96,6 +95,14 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
         }
         
     }
+
+    public override int BulletsInClip{
+        get{return bulletsInClip;}
+    }
+
+    public override int ClipSize{
+        get{return clipSize;}
+    }
 	
 
 
@@ -115,7 +122,7 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 	}
 
 
-    public void DropGun()
+    public override void Drop()
     {
         enabled = false;
 
@@ -196,7 +203,6 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
                 ///
                 audioSource.PlayOneShot(shoot);
                 bulletsInClip -= 1;
-                HUD.SetClipAmmo(bulletsInClip, clipSize);
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
                 bullet.transform.position = bulletSpawnPoint.position;
@@ -235,7 +241,6 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
                 audioSource.PlayOneShot(reload);
                 bulletsInClip = bulletsFromInventory + bulletsInClip;
                 timeSinceLastShot = -(reload.length - timeBetweenShoots);
-                HUD.SetClipAmmo(bulletsInClip, clipSize);
             }
 
            
