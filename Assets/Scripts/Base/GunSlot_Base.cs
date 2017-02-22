@@ -38,8 +38,10 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	/// </summary>
 	public abstract void Reload();
 
+
 	/// <summary>
 	/// Shoots the currently equipped weapon.
-	/// </summary>	
-	public abstract void Shoot();
+	/// </summary>
+	/// <param name="firstDown">If this is the first frame that the shoot button is down.</param>
+	public abstract void Shoot(bool firstDown);
 }

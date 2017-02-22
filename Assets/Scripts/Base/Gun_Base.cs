@@ -6,9 +6,15 @@ public abstract class Gun_Base : MonoBehaviour {
 
 	public abstract void Reload();
 
-	public abstract void Shoot();	
+	public abstract void Shoot(bool firstDown);	
 
 	public abstract void Drop();
+
+	/// <summary>
+	/// Aligns the gun to point at the center of the players screen.
+	/// Requires that the gun be equipped.
+	/// </summary>
+	public abstract void Align();
 
 	public abstract GunType GetGunType();
 

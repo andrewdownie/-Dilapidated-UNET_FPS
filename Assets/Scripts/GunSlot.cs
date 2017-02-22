@@ -26,6 +26,7 @@ public class GunSlot : GunSlot_Base {
             equippedWeapon = secondaryWeapon;
         }
         equippedWeapon.gameObject.SetActive(true);        
+        equippedWeapon.Align();
 
         UpdateAmmoHUD();
     }
@@ -46,16 +47,21 @@ public class GunSlot : GunSlot_Base {
     }
 
     public override bool TryPickup(Gun_Base gun){
+        if(primaryWeapon == null){
+            primaryWeapon = gun;
+            equippedWeapon = primaryWeapon;
+            secondaryWeapon.gameObject.SetActive(false);
+            UpdateAmmoHUD();
+            return true;
+        }
         return false;
     }
 
     public override void PreviousWeapon(){
-        Debug.Log("Previous weapon");
         ToggleEquip();
     }
 
     public override void NextWeapon(){
-        Debug.Log("Next weapon");
         ToggleEquip();
     }
 
@@ -73,6 +79,7 @@ public class GunSlot : GunSlot_Base {
         }
         equippedWeapon.gameObject.SetActive(true);
         UpdateAmmoHUD();
+        equippedWeapon.Align();
     }
 
 
@@ -93,8 +100,8 @@ public class GunSlot : GunSlot_Base {
     }
 
 
-    public override void Shoot(){
-        equippedWeapon.Shoot();
+    public override void Shoot(bool firstDown){
+        equippedWeapon.Shoot(firstDown);
         UpdateAmmoHUD();
     }
 }

@@ -2,17 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? transfer ownership on pickup?
+public class Gun : Gun_Base {
     [SerializeField]
     private GunType gunType;
 
-    private Player player;
-    private GunSlot gunSlot;
+    private Player_Base player;
+    private GunSlot_Base gunSlot;
 
-    [Header("Sound")]
-    [SerializeField]
-    private AudioSource audioSource;
-
+    [Header("Sound Clips")]
     [SerializeField]
     private AudioClip shoot, reload, outOfAmmo;
 
@@ -26,7 +23,6 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 
     [SerializeField]
     private bool automatic;
-    private System.Func<KeyCode, bool> mouseAction;
 
     [SerializeField]
     float timeBetweenShoots = 0.3f;
@@ -49,28 +45,16 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
     [SerializeField]
     private ParticleSystem muzzleFlash;
 
+    [SerializeField]
     HitMarkerCallback hitMarkerCallback;
     
 
     void Start()
     {
-        hitMarkerCallback = GetComponent<HitMarkerCallback>();
-        
-        if (automatic)
-        {
-            mouseAction = Input.GetKey;
-        }
-        else
-        {
-            mouseAction = Input.GetKeyDown;
-        }
-        
-        FindWeaponSlotAndPlayer();
-
-
+        FindGunSlotAndPlayer();
     }
 
-    void FindWeaponSlotAndPlayer()
+    void FindGunSlotAndPlayer()
     {
         Transform parent = transform.parent;
 
@@ -108,16 +92,9 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 
 	// Update is called once per frame
 	void Update () {
-        AlignGun();
 
-        //TODO: this should be handled in the player class, but how to handle automatic / single fire 
-        //      from that level?
-        if (mouseAction(KeyCode.Mouse0))
-        {
-            Shoot();  
-        }
-
-
+        //TODO: record the time since last shot once, and compare the saved value to
+        //      the current value
         timeSinceLastShot += Time.deltaTime;
 	}
 
@@ -144,18 +121,18 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
         {
             Debug.Log("Collided with: " + coll.name);
 
-            Player _player = coll.GetComponent<Player>();
+            Player_Base _player = coll.GetComponent<Player_Base>();
             if (_player != null)
             {
-                GunSlot _weaponSlot = _player.GetComponentInChildren<GunSlot>();
+                GunSlot_Base _gunSlot = _player.GunSlot;
 
-                if (_weaponSlot != null)
+                if (_gunSlot != null && _gunSlot.TryPickup(this))
                 {
                     player = _player;
-                    gunSlot = _weaponSlot;
-                    gameObject.transform.parent = _weaponSlot.transform;
+                    gunSlot = _gunSlot;
+                    gameObject.transform.parent = _gunSlot.transform;
 
-                    Destroy(GetComponent<Rigidbody>());//Why do I destroy rigidbody and disable colliders?
+                    Destroy(GetComponent<Rigidbody>());
                     enabled = true;
 
                     Collider[] colliders = GetComponents<Collider>();
@@ -166,7 +143,7 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 
                     transform.localPosition = Vector3.zero;
                     transform.localRotation = Quaternion.Euler(0, 180, 0);
-
+                    Align();
                 }
             }
 
@@ -179,7 +156,7 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
         gunSlot = null;
     } 
 
-    void AlignGun(){
+    public override void Align(){
         if(player != null){
             Transform target = transform.parent.parent;
             Vector3 point = target.position + (target.forward * 10);
@@ -189,7 +166,10 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
         }
     }
 
-    public override void Shoot(){
+    public override void Shoot(bool firstDown){
+        if(!automatic && !firstDown){
+            return;
+        }
 
         if (timeSinceLastShot >= timeBetweenShoots)
         {
@@ -201,7 +181,7 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
                 ///
                 /// Create the bullet
                 ///
-                audioSource.PlayOneShot(shoot);
+                player.AudioSource.PlayOneShot(shoot);
                 bulletsInClip -= 1;
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
@@ -223,7 +203,7 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
             }
             else
             {
-                audioSource.PlayOneShot(outOfAmmo);
+                player.AudioSource.PlayOneShot(outOfAmmo);
             }
 
         }
@@ -238,8 +218,8 @@ public class Gun : Gun_Base {//TODO: need to check who actually owns the gun? tr
 
             if(bulletsFromInventory > 0)
             {
-                audioSource.PlayOneShot(reload);
-                bulletsInClip = bulletsFromInventory + bulletsInClip;
+                player.AudioSource.PlayOneShot(reload);
+                bulletsInClip += bulletsFromInventory;
                 timeSinceLastShot = -(reload.length - timeBetweenShoots);
             }
 

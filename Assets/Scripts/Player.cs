@@ -13,6 +13,9 @@ using System;
 public class Player : Player_Base {
 
     [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
     private Vitals_Base vitals;
 
     [SerializeField]
@@ -20,6 +23,8 @@ public class Player : Player_Base {
 
     [SerializeField]
     private AmmoInventory ammo;
+
+    private bool shooting;
 
 
     public override Vitals_Base Vitals{
@@ -32,6 +37,10 @@ public class Player : Player_Base {
 
     public override AmmoInventory Ammo{
         get{return ammo;}
+    }
+
+    public override AudioSource AudioSource{
+        get{return audioSource;}
     }
 
     public override void PickupAmmo(int amount, GunType gunType)
@@ -64,5 +73,22 @@ public class Player : Player_Base {
         if(Input.GetKeyDown(KeyCode.Q)){
             gunSlot.NextWeapon();
         }
+
+
+        ///
+        /// Handle shooting
+        ///
+        if(Input.GetKeyDown(KeyCode.Mouse0) && !shooting){
+            shooting = true;
+            gunSlot.Shoot(true);
+        }
+        else if(Input.GetKey(KeyCode.Mouse0)){
+            gunSlot.Shoot(false);
+        } 
+        else if(Input.GetKeyUp(KeyCode.Mouse0)){
+            shooting = false;
+        }
+                
+        
     }
 }
