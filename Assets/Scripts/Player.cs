@@ -24,8 +24,6 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory ammo;
 
-    private bool shooting;
-
 
     public override Vitals_Base Vitals{
         get{return vitals;}
@@ -78,16 +76,9 @@ public class Player : Player_Base {
         ///
         /// Handle shooting
         ///
-        if(Input.GetKeyDown(KeyCode.Mouse0) && !shooting){
-            shooting = true;
-            gunSlot.Shoot(true);
-        }
-        else if(Input.GetKey(KeyCode.Mouse0)){
-            gunSlot.Shoot(false);
+        if(Input.GetKey(KeyCode.Mouse0)){
+            gunSlot.Shoot(Input.GetKeyDown(KeyCode.Mouse0));
         } 
-        else if(Input.GetKeyUp(KeyCode.Mouse0)){
-            shooting = false;
-        }
                 
         
     }
