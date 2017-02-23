@@ -79,6 +79,8 @@ public class ZombieAI : MonoBehaviour {
 
         if(aiState == ZombieAIState.chasing)
         {
+            if(target == null){aiState = ZombieAIState.idle;}
+
             rigid.MovePosition(Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime));
 
             float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);

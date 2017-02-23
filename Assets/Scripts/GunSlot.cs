@@ -16,11 +16,11 @@ public class GunSlot : GunSlot_Base {
 
 	// Use this for initialization
 	void Start () {
-        primaryWeapon.gameObject.SetActive(false);
-        secondaryWeapon.gameObject.SetActive(false);
 
         if(primaryWeapon != null){
+            Debug.Log("Primary weapon is null");
             equippedWeapon = primaryWeapon;
+            secondaryWeapon.gameObject.SetActive(false);
         }
         else{
             equippedWeapon = secondaryWeapon;
