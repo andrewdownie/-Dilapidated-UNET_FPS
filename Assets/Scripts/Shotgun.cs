@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 //TODO: replace player reference, to indirect references through GunSlot
-public class Gun : Gun_Base {
+public class Shotgun : Gun_Base {
     [SerializeField]
     private GunType gunType;
 
@@ -25,8 +26,14 @@ public class Gun : Gun_Base {
     private bool automatic;
 
     [SerializeField]
-    float timeBetweenShoots = 0.3f;
+    float timeBetweenShots = 0.3f;
     float timeSinceLastShot = 1f;
+
+	[SerializeField]
+	private float timeBetweenReloads;
+	private float timeSinceLastReload;
+
+	bool canShoot, canReload, reloading;
 
 
     [Header("Other Setup")]
@@ -92,13 +99,27 @@ public class Gun : Gun_Base {
 
 	// Update is called once per frame
 	void Update () {
-
         //TODO: record the time since last shot once, and compare the saved value to
         //      the current value
         timeSinceLastShot += Time.deltaTime;
+		timeSinceLastReload += Time.deltaTime;
+
+		if(timeSinceLastShot >= timeBetweenShots){
+			canShoot = true;
+		}
+
+		if(timeSinceLastReload >= timeBetweenReloads){
+			canReload = true;
+		}
+
+		if(reloading){
+			Reload();
+		}
 	}
 
 
+
+	//TODO: instead of adding a rigid body, have a rigid body on by default, and toggle 'isKinematic' (don't actually know if this will do what I want, but it would be much better than what I have if it does)
     public override void Drop()
     {
         enabled = false;
@@ -171,9 +192,12 @@ public class Gun : Gun_Base {
             return;
         }
 
-        if (timeSinceLastShot >= timeBetweenShoots)
+        if (canShoot)
         {
             timeSinceLastShot = 0;
+			canShoot = false;
+			canReload = false;
+			reloading = false;
 
             if (bulletsInClip > 0)
             {
@@ -212,19 +236,30 @@ public class Gun : Gun_Base {
     public override void Reload(){
         
 
-        if(bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
+        if(bulletsInClip < clipSize)
         {
-            int bulletsFromInventory = player.Ammo.Request(clipSize - bulletsInClip, gunType);
+			if(canShoot && canReload){
+				reloading = true;
+				int bulletsFromInventory = player.Ammo.Request(1, gunType);
 
-            if(bulletsFromInventory > 0)
-            {
-                player.AudioSource.PlayOneShot(reload);
-                bulletsInClip += bulletsFromInventory;
-                timeSinceLastShot = -(reload.length - timeBetweenShoots);
-            }
+				if(bulletsFromInventory > 0)
+				{
+					player.AudioSource.PlayOneShot(reload);
+					bulletsInClip += bulletsFromInventory;
+					timeSinceLastReload = 0;
+					canReload = false;
+					HUD.SetClipAmmo(bulletsInClip, clipSize);
+				}
+				else{
+					reloading = false;
+				}
+			}
 
            
         }
+		else{
+			reloading = false;
+		}
     }
 
     public override GunType GetGunType(){
@@ -232,14 +267,4 @@ public class Gun : Gun_Base {
     }
 
     
-}
-
-
-public enum GunType
-{
-    sniper,
-    shotgun,
-    pistol,
-    smg,
-    assaultRifle
 }
