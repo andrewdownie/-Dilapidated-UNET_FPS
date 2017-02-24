@@ -8,8 +8,7 @@ using System;
 ///     1. Act as a centralized organizer of all the components that make up a player (vitals, gunslot, ect.) 
 ///     2. Act as an interface for picking items up in the world.
 ///     3. Handle user input (in the update method)
-///     TODO: solution for automatic / single shot weapons
-/// /// /// </summary>
+/// </summary>
 public class Player : Player_Base {
 
     [SerializeField]

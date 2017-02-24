@@ -21,6 +21,9 @@ public class Shotgun : Gun_Base {
     [SerializeField]
     private int bulletsInClip = 5;
 
+	[SerializeField]
+	private int pelletCount = 10;
+
 
     [SerializeField]
     private bool automatic;
@@ -203,21 +206,23 @@ public class Shotgun : Gun_Base {
             {
             
                 ///
-                /// Create the bullet
+                /// Create the bullets
                 ///
                 player.AudioSource.PlayOneShot(shoot);
                 bulletsInClip -= 1;
 
-                Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
-                bullet.transform.position = bulletSpawnPoint.position;
-                bullet.transform.rotation = bulletSpawnPoint.rotation;
-                bullet.SetHitMarkerCallBack(hitMarkerCallback);
+				for(int i = 0; i < pelletCount; i++){
+					Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
+					bullet.transform.position = bulletSpawnPoint.position;
+					bullet.transform.rotation = bulletSpawnPoint.rotation;
+					bullet.SetHitMarkerCallBack(hitMarkerCallback);
 
-                Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
-                t.position = bulletSpawnPoint.position;
-                t.rotation = bulletSpawnPoint.rotation;
-                t.parent = bulletSpawnPoint;
+				}
 
+				Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
+				t.position = bulletSpawnPoint.position;
+				t.rotation = bulletSpawnPoint.rotation;
+				t.parent = bulletSpawnPoint;
                 ///
                 /// Create the shell
                 ///
