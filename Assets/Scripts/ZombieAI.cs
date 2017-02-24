@@ -79,7 +79,10 @@ public class ZombieAI : MonoBehaviour {
 
         if(aiState == ZombieAIState.chasing)
         {
-            if(target == null){aiState = ZombieAIState.idle;}
+            if(target == null){
+                aiState = ZombieAIState.idle;
+                return; 
+                }
 
             rigid.MovePosition(Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime));
 

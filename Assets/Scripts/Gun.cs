@@ -197,7 +197,7 @@ public class Gun : Gun_Base {
                 ///
                 /// Create the shell
                 ///
-                Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation);
+                Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
            
             
             }
