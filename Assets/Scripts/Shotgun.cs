@@ -47,7 +47,7 @@ public class Shotgun : Gun_Base {
     private Transform shellSpawnPoint;
     
     [SerializeField]
-    private GameObject bulletPrefab;
+    private ShotgunPellet shotgunPelletPrefab;
 
     [SerializeField]
     private GameObject shellPrefab;
@@ -212,11 +212,11 @@ public class Shotgun : Gun_Base {
                 bulletsInClip -= 1;
 
 				for(int i = 0; i < pelletCount; i++){
-					Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
+					ShotgunPellet bullet = ((GameObject)Instantiate(shotgunPelletPrefab.gameObject)).GetComponent<ShotgunPellet>();
 					bullet.transform.position = bulletSpawnPoint.position;
 					bullet.transform.rotation = bulletSpawnPoint.rotation;
 					bullet.SetHitMarkerCallBack(hitMarkerCallback);
-
+                    bullet.SetupBulletVelocity(i == 0);
 				}
 
 				Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
