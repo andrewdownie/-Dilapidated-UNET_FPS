@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class HealthPack : MonoBehaviour {
 
-    [SerializeField]
-    private HideGameObject hideGameObject;
 
 
     [SerializeField]
@@ -12,6 +10,9 @@ public class HealthPack : MonoBehaviour {
 
     [SerializeField]
     private AudioClip pickupSound;
+
+    [SerializeField]
+    HideGameObject hide;
 
     void OnTriggerEnter(Collider coll)
     {
@@ -28,7 +29,7 @@ public class HealthPack : MonoBehaviour {
 
                 audioSource.PlayOneShot(pickupSound);
 
-                hideGameObject.Hide();
+                hide.Hide();
             }
             
         }

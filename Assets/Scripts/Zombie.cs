@@ -7,7 +7,7 @@ public class Zombie : MonoBehaviour {
     private float curHealth = 100, maxHealth = 100;
 
     [SerializeField]
-    private HideGameObject hideGameObject;
+    private HideGameObject hide;
 
     [SerializeField]
     private AudioClip zombieDie;
@@ -47,7 +47,7 @@ public class Zombie : MonoBehaviour {
 
         if (curHealth == 0)
         {
-            hideGameObject.Hide();
+            hide.Hide();
             audioSource.PlayOneShot(zombieDie);
             Destroy(gameObject, 5);
 

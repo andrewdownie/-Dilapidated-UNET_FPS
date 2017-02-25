@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class AmmoPickup : MonoBehaviour {
     [SerializeField]
@@ -8,15 +8,16 @@ public class AmmoPickup : MonoBehaviour {
     [SerializeField]
     private int numberOfbullets;
 
-    [SerializeField]
-    private HideGameObject hideGameObject;
-
 
     [SerializeField]
     private AudioSource audioSource;
 
     [SerializeField]
     private AudioClip pickupSound;
+
+    [SerializeField]
+    HideGameObject hide;
+
 
     void OnTriggerEnter(Collider coll)
     {
@@ -29,7 +30,7 @@ public class AmmoPickup : MonoBehaviour {
             Destroy(gameObject, pickupSound.length + 1f);
 
             audioSource.PlayOneShot(pickupSound);
-            hideGameObject.Hide();
+            hide.Hide();
 
         }
 
