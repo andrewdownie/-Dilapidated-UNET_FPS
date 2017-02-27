@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AmmoInventory.cs" />
      <Compile Include="Assets\Scripts\AmmoPickup.cs" />
+     <Compile Include="Assets\Scripts\Base\AmmoInventory_Base.cs" />
      <Compile Include="Assets\Scripts\Base\GunSlot_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Gun_Base.cs" />
      <Compile Include="Assets\Scripts\Base\HUD_Base.cs" />

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class AmmoInventory : MonoBehaviour {
+public class AmmoInventory : AmmoInventory_Base {
 
-
+    private Action CB_AmmoChanged;
     
     private Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
 
@@ -30,27 +30,44 @@ public class AmmoInventory : MonoBehaviour {
         bullets.Add(GunType.shotgun, shotgun);
     }
 
-    public int Count(GunType type){
-        return bullets[type];
+    public override int Count(GunType gunType){
+        return bullets[gunType];
     }
 
 
-    public void Add(int amount, GunType type){
-        if(amount > 0){
-            bullets[type] += amount;
+    public override void Add(GunType gunType, int ammoAmount){
+        if(ammoAmount > 0){
+            bullets[gunType] += ammoAmount;
+
+            if(CB_AmmoChanged != null){
+                CB_AmmoChanged();
+            }
+
         }
     }
 
 
-    public int Request(int amountRequested, GunType type){
-        if(bullets[type] >= amountRequested){
-            bullets[type] -= amountRequested;
-            return amountRequested;
+    public override int Request(GunType gunType, int amountRequested){
+        int returnAmount = 0;
+
+        if(bullets[gunType] >= amountRequested){
+            bullets[gunType] -= amountRequested;
+            returnAmount = amountRequested;
+        }
+        else{
+            returnAmount = bullets[gunType];
+            bullets[gunType] = 0;
         }
 
-        int amountAvailable = bullets[type];
-        bullets[type] = 0;
-        return amountAvailable; 
+        if(CB_AmmoChanged != null){
+            CB_AmmoChanged();
+        }
+
+        return returnAmount; 
+    }
+    
+    public override void SetCB_AmmoChanged(Action action){
+        CB_AmmoChanged = action;
     }
 
 }

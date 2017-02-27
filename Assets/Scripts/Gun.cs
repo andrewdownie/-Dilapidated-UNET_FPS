@@ -214,7 +214,7 @@ public class Gun : Gun_Base {
 
         if(bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
         {
-            int bulletsFromInventory = player.Ammo.Request(clipSize - bulletsInClip, gunType);
+            int bulletsFromInventory = player.Ammo.Request(gunType, clipSize - bulletsInClip);
 
             if(bulletsFromInventory > 0)
             {

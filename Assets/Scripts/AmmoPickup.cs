@@ -26,7 +26,7 @@ public class AmmoPickup : MonoBehaviour {
             Player player = coll.GetComponent<Player>();
 
 
-            player.PickupAmmo(numberOfbullets, typeOfAmmo);
+            player.PickupAmmo(typeOfAmmo, numberOfbullets);
             Destroy(gameObject, pickupSound.length + 1f);
 
             audioSource.PlayOneShot(pickupSound);

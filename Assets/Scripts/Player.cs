@@ -21,8 +21,11 @@ public class Player : Player_Base {
     private GunSlot_Base gunSlot;
 
     [SerializeField]
-    private AmmoInventory ammo;
+    private AmmoInventory_Base ammo;
 
+    void Start(){
+        ammo.SetCB_AmmoChanged(CB_AmmoInventory);
+    }
 
     public override Vitals_Base Vitals{
         get{return vitals;}
@@ -32,7 +35,7 @@ public class Player : Player_Base {
         get{return gunSlot;}
     }
 
-    public override AmmoInventory Ammo{
+    public override AmmoInventory_Base Ammo{
         get{return ammo;}
     }
 
@@ -40,14 +43,19 @@ public class Player : Player_Base {
         get{return audioSource;}
     }
 
-    public override void PickupAmmo(int amount, GunType gunType)
+    public override void PickupAmmo(GunType gunType, int amount)
     {
-        ammo.Add(amount, gunType);
-        gunSlot.UpdateAmmoHUD();
+        //TODO: make the pickup ammo script target the AmmoInventory_Base class directly
+        ammo.Add(gunType, amount);
     }
 
     public override bool TryPickupGun(Gun_Base gun){
+        //TODO: make the pickup gun script target the weapon slot directly
         return gunSlot.TryPickup(gun);
+    }
+
+    private void CB_AmmoInventory(){
+        gunSlot.UpdateAmmoHUD();
     }
 
 

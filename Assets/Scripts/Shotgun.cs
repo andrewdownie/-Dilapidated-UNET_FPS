@@ -245,7 +245,7 @@ public class Shotgun : Gun_Base {
         {
 			if(canShoot && canReload){
 				reloading = true;
-				int bulletsFromInventory = player.Ammo.Request(1, gunType);
+				int bulletsFromInventory = player.Ammo.Request(gunType, 1);
 
 				if(bulletsFromInventory > 0)
 				{
