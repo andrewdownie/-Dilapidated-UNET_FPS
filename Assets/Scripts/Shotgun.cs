@@ -267,8 +267,8 @@ public class Shotgun : Gun_Base {
 		}
     }
 
-    public override GunType GetGunType(){
-        return gunType;
+    public override GunType GunType{
+        get{return gunType;}
     }
 
     

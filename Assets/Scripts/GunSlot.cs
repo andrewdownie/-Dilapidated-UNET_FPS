@@ -1,57 +1,61 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class GunSlot : GunSlot_Base {
-    [SerializeField]
-    private Player player;
 
     [SerializeField]
-    private Gun_Base primaryWeapon;
+    Player player;
+
+    private Action CB_AmmoChanged;
+
+    [SerializeField]
+    private Gun_Base primaryGun;
     
     [SerializeField]
-    private Gun_Base secondaryWeapon;
+    private Gun_Base secondaryGun;
 
 
-    private Gun_Base equippedWeapon;
+    private Gun_Base equippedGun;
 
 	// Use this for initialization
 	void Start () {
 
-        if(primaryWeapon != null){
+        if(primaryGun != null){
             Debug.Log("Primary weapon is null");
-            equippedWeapon = primaryWeapon;
-            secondaryWeapon.gameObject.SetActive(false);
+            equippedGun = primaryGun;
+            secondaryGun.gameObject.SetActive(false);
         }
         else{
-            equippedWeapon = secondaryWeapon;
+            equippedGun = secondaryGun;
         }
-        equippedWeapon.gameObject.SetActive(true);        
-        equippedWeapon.Align();
+        equippedGun.gameObject.SetActive(true);        
+        equippedGun.Align();
 
-        UpdateAmmoHUD();
+        CB_AmmoChanged();
     }
 	
     public override void Drop(){
-        if(primaryWeapon != null && equippedWeapon != secondaryWeapon)
+        if(primaryGun != null && equippedGun != secondaryGun)
         {
-            equippedWeapon = secondaryWeapon;
-            secondaryWeapon.gameObject.SetActive(true);
-            UpdateAmmoHUD();
+            equippedGun = secondaryGun;
+            secondaryGun.gameObject.SetActive(true);
+//            UpdateAmmoHUD();
 
-            primaryWeapon.transform.parent = null;
-            primaryWeapon.Drop();
-            primaryWeapon = null;
+            primaryGun.transform.parent = null;
+            primaryGun.Drop();
+            primaryGun = null;
         }
 
-        UpdateAmmoHUD();
+        CB_AmmoChanged();
     }
 
     public override bool TryPickup(Gun_Base gun){
-        if(primaryWeapon == null){
-            primaryWeapon = gun;
-            equippedWeapon = primaryWeapon;
-            secondaryWeapon.gameObject.SetActive(false);
-            UpdateAmmoHUD();
+        if(primaryGun == null){
+            primaryGun = gun;
+            equippedGun = primaryGun;
+            secondaryGun.gameObject.SetActive(false);
+            CB_AmmoChanged();
             return true;
         }
         return false;
@@ -66,42 +70,55 @@ public class GunSlot : GunSlot_Base {
     }
 
     private void ToggleEquip(){
-        if(primaryWeapon == null){
+        if(primaryGun == null){
             return;
         }
 
-        equippedWeapon.gameObject.SetActive(false);
-        if(equippedWeapon == primaryWeapon){
-            equippedWeapon = secondaryWeapon;
+        equippedGun.gameObject.SetActive(false);
+        if(equippedGun == primaryGun){
+            equippedGun = secondaryGun;
         }
         else{
-            equippedWeapon = primaryWeapon;
+            equippedGun = primaryGun;
         }
-        equippedWeapon.gameObject.SetActive(true);
-        UpdateAmmoHUD();
-        equippedWeapon.Align();
+        equippedGun.gameObject.SetActive(true);
+        CB_AmmoChanged();
+        equippedGun.Align();
     }
 
-
-    public override void UpdateAmmoHUD(){
-        HUD.SetInventoryAmmo(player.Ammo.Count(equippedWeapon.GetGunType()));
-        HUD.SetClipAmmo(equippedWeapon.BulletsInClip, equippedWeapon.ClipSize);
-    }
-
-
-    public Player Player
-    {
-        get { return player; }
-    }
 
     public override void Reload(){
-        equippedWeapon.Reload();
-        UpdateAmmoHUD();
+        equippedGun.Reload();
+        CB_AmmoChanged();
     }
 
 
     public override void Shoot(bool firstDown){
-        equippedWeapon.Shoot(firstDown);
-        UpdateAmmoHUD();
+        equippedGun.Shoot(firstDown);
+        CB_AmmoChanged();
+    }
+
+    public override int BulletsInClip{
+        get{ return equippedGun.BulletsInClip;}
+    }
+
+    public override int ClipSize{
+        get{return equippedGun.ClipSize;}
+    }
+
+
+    public override void SetCB_AmmoChanged(Action action){
+        CB_AmmoChanged = action;
+    }
+
+
+    public override Gun_Base EquippedGun{
+        get{
+            return equippedGun;
+        }
+    }
+
+    public override Player Player{
+        get{return player;}
     }
 }

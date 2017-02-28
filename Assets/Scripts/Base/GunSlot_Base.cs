@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class GunSlot_Base : MonoBehaviour {
 
@@ -29,11 +30,6 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	public abstract void NextWeapon();
 
 	/// <summary>
-	/// Updates the ammo HUD, used when the player picks up ammo to their inventory.
-	/// </summary>
-	public abstract void UpdateAmmoHUD();	
-
-	/// <summary>
 	/// Reloads the currently equipped weapon.
 	/// </summary>
 	public abstract void Reload();
@@ -44,4 +40,17 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="firstDown">If this is the first frame that the shoot button is down.</param>
 	public abstract void Shoot(bool firstDown);
+
+
+	public abstract int BulletsInClip{get;}
+
+	public abstract int ClipSize{get;}
+
+
+	public abstract void SetCB_AmmoChanged(Action action);
+
+
+	public abstract Gun_Base EquippedGun{get;}
+
+	public abstract Player Player{get;}
 }

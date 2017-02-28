@@ -25,6 +25,7 @@ public class Player : Player_Base {
 
     void Start(){
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
+        gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
     }
 
     public override Vitals_Base Vitals{
@@ -55,7 +56,8 @@ public class Player : Player_Base {
     }
 
     private void CB_AmmoInventory(){
-        gunSlot.UpdateAmmoHUD();
+        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); //TODO: change GetGunType() to getter
+        HUD.SetClipAmmo(gunSlot.EquippedGun.BulletsInClip, gunSlot.EquippedGun.ClipSize);
     }
 
 

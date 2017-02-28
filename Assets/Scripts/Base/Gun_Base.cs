@@ -16,7 +16,8 @@ public abstract class Gun_Base : MonoBehaviour {
 	/// </summary>
 	public abstract void Align();
 
-	public abstract GunType GetGunType();
+
+	public abstract GunType GunType{get;}
 
 	public abstract int ClipSize{get;}
 	public abstract int BulletsInClip{get;}
