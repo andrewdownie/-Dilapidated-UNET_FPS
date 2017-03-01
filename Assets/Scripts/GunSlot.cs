@@ -30,7 +30,7 @@ public class GunSlot : GunSlot_Base {
             equippedGun = secondaryGun;
         }
         equippedGun.gameObject.SetActive(true);        
-        equippedGun.Align();
+        equippedGun.AlignGun();
 
         CB_AmmoChanged();
     }
@@ -83,7 +83,7 @@ public class GunSlot : GunSlot_Base {
         }
         equippedGun.gameObject.SetActive(true);
         CB_AmmoChanged();
-        equippedGun.Align();
+        equippedGun.AlignGun();
     }
 
 

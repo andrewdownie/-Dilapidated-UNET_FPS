@@ -11,11 +11,12 @@ public abstract class Gun_Base : MonoBehaviour {
 	public abstract void Drop();
 
 	/// <summary>
-	/// Aligns the gun to point at the center of the players screen.
+	/// Aligns the alignObject to point at the center of the players screen.
 	/// Requires that the gun be equipped.
 	/// </summary>
-	public abstract void Align();
+    public abstract void Align(Transform alignObject, Vector3 additionalRotation);
 
+	public abstract void AlignGun();
 
 	public abstract GunType GunType{get;}
 

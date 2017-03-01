@@ -4,6 +4,9 @@ using System.Collections;
 //TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base {
     [SerializeField]
+    LayerMask alignMask;
+
+    [SerializeField]
     private GunType gunType;
 
     private Player_Base player;
@@ -106,6 +109,8 @@ public class Gun : Gun_Base {
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
         rb.useGravity = true;
 
+
+
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider c in colliders)
         {
@@ -143,7 +148,7 @@ public class Gun : Gun_Base {
 
                     transform.localPosition = Vector3.zero;
                     transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    Align();
+                    AlignGun();
                 }
             }
 
@@ -156,14 +161,31 @@ public class Gun : Gun_Base {
         gunSlot = null;
     } 
 
-    public override void Align(){
+    public override void Align(Transform alignObject, Vector3 additionalRotation){
+
         if(player != null){
-            Transform target = transform.parent.parent;
-            Vector3 point = target.position + (target.forward * 10);
+            Transform camera = transform.parent.parent;
+            RaycastHit hit;
+            Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
+            Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
             
+            Vector3 point = hit.point;
+            
+            alignObject.LookAt(point);
+            alignObject.Rotate(additionalRotation);
+        }
+    }
+
+
+    public override void AlignGun(){
+        if(player != null){
+            Transform camera = transform.parent.parent;
+            Vector3 point = camera.position + (camera.forward * 10000);
+
             transform.LookAt(point);
             transform.Rotate(new Vector3(0, 90, 0));
         }
+
     }
 
     public override void Shoot(bool firstDown){
@@ -186,8 +208,10 @@ public class Gun : Gun_Base {
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
                 bullet.transform.position = bulletSpawnPoint.position;
-                bullet.transform.rotation = bulletSpawnPoint.rotation;
+                //bullet.transform.rotation = bulletSpawnPoint.rotation;
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
+
+                Align(bullet.transform, new Vector3(0, 0, 0));
 
                 Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
                 t.position = bulletSpawnPoint.position;
