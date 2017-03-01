@@ -53,7 +53,7 @@ public class Shotgun : Gun_Base {
     private ShotgunPellet shotgunPelletPrefab;
 
     [SerializeField]
-    private GameObject shellPrefab;
+    private Shell_Base shellPrefab;
 
     [SerializeField]
     private ParticleSystem muzzleFlash;
@@ -250,7 +250,8 @@ public class Shotgun : Gun_Base {
                 ///
                 /// Create the shell
                 ///
-                Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
+                Shell_Base shell = (Shell_Base)Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
+                shell.AddVelocity(player.Rigidbody.velocity);
            
             
             }

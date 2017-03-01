@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shell : MonoBehaviour {
+public class Shell : Shell_Base {
 
     [SerializeField]
     private Vector3 initialBulletForce = new Vector3(25, 25, 0);
@@ -25,6 +25,11 @@ public class Shell : MonoBehaviour {
 
 
         Destroy(this, destroyTimer);
+    }
+
+    public override void AddVelocity(Vector3 velocity){
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.velocity = rb.velocity + velocity;
     }
 
 }

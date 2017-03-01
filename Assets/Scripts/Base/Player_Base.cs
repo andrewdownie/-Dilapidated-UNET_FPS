@@ -16,4 +16,7 @@ public abstract class Player_Base : MonoBehaviour {
 	public abstract GunSlot_Base GunSlot{get;} 
 	public abstract AmmoInventory_Base Ammo{get;}
 
+
+	public abstract Rigidbody Rigidbody{get;}
+
 }

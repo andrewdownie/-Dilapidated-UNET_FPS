@@ -44,6 +44,10 @@ public class Player : Player_Base {
         get{return audioSource;}
     }
 
+    public override Rigidbody Rigidbody{
+        get{return GetComponent<Rigidbody>();}
+    }
+
     public override void PickupAmmo(GunType gunType, int amount)
     {
         //TODO: make the pickup ammo script target the AmmoInventory_Base class directly

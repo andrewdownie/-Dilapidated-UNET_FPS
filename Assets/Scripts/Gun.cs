@@ -43,7 +43,7 @@ public class Gun : Gun_Base {
     private GameObject bulletPrefab;
 
     [SerializeField]
-    private GameObject shellPrefab;
+    private Shell_Base shellPrefab;
 
     [SerializeField]
     private ParticleSystem muzzleFlash;
@@ -208,7 +208,6 @@ public class Gun : Gun_Base {
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
                 bullet.transform.position = bulletSpawnPoint.position;
-                //bullet.transform.rotation = bulletSpawnPoint.rotation;
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
 
                 Align(bullet.transform, new Vector3(0, 0, 0));
@@ -221,7 +220,8 @@ public class Gun : Gun_Base {
                 ///
                 /// Create the shell
                 ///
-                Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
+                Shell_Base shell = (Shell_Base)Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
+                shell.AddVelocity(player.Rigidbody.velocity);
            
             
             }
