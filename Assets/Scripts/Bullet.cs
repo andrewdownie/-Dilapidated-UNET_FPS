@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bullet : MonoBehaviour {
+public class Bullet : Bullet_Base {
 
     [SerializeField]
     private float initialBulletForce = 500;
@@ -9,6 +9,12 @@ public class Bullet : MonoBehaviour {
     private Vector2 forceMultiplierRange = new Vector2(0.5f, 1.5f);
     [SerializeField][Range(0, float.MaxValue)]
     private float accuracyModifier = 0.5f;
+
+    [SerializeField]
+    private LineRenderer lineRenderer;
+
+
+    Vector3 spawnPoint;
 
    // [SerializeField]
     //private LayerMask layerMask;
@@ -37,7 +43,7 @@ public class Bullet : MonoBehaviour {
 
 
         rigid.AddForce(force, ForceMode.Impulse);
-        
+        lineRenderer.enabled = true;
 
         Destroy(this, 4);
     }
@@ -65,21 +71,35 @@ public class Bullet : MonoBehaviour {
             zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
 
             hitMarkerCallback.ConfirmHit();
+
+            
         }
+
+        enabled = false;
+        lineRenderer.enabled = false;
     }
 
-    public void SetHitMarkerCallBack(HitMarkerCallback callback)
+    public override void SetHitMarkerCallBack(HitMarkerCallback callback)
     {
         hitMarkerCallback = callback;
     }
 
+    public override void InitBulletTrail(Vector3 spawnPosition){
+        spawnPoint = spawnPosition;
+    }
 
-    void FixedUpdate()
+
+    void Update()
     {
         if(transform.position.y < 1 && !beingDestroyed)
         {
             beingDestroyed = true;
             Destroy(gameObject, 120);
         }
+
+        float distance = Mathf.Clamp(Vector3.Distance(spawnPoint, transform.position), 0, 25);
+
+        lineRenderer.SetPosition(1, transform.position);
+        lineRenderer.SetPosition(0, transform.position + transform.forward * -distance );
     }
 }

@@ -46,7 +46,8 @@ public class Gun : Gun_Base {
     private Shell_Base shellPrefab;
 
     [SerializeField]
-    private ParticleSystem muzzleFlash;
+    //private ParticleSystem muzzleFlash;
+    private MuzzleFlash_Base muzzleFlash;
 
     [SerializeField]
     HitMarkerCallback hitMarkerCallback;
@@ -166,7 +167,7 @@ public class Gun : Gun_Base {
         if(player != null){
             Transform camera = transform.parent.parent;
             RaycastHit hit;
-            Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
+            //Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
             Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
             
             Vector3 point = hit.point;
@@ -209,13 +210,16 @@ public class Gun : Gun_Base {
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
                 bullet.transform.position = bulletSpawnPoint.position;
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
+                bullet.InitBulletTrail(bullet.transform.position);
 
                 Align(bullet.transform, new Vector3(0, 0, 0));
 
-                Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
+                /*Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
                 t.position = bulletSpawnPoint.position;
                 t.rotation = bulletSpawnPoint.rotation;
-                t.parent = bulletSpawnPoint;
+                t.parent = bulletSpawnPoint;*/
+
+                muzzleFlash.ShowFlash();
 
                 ///
                 /// Create the shell
