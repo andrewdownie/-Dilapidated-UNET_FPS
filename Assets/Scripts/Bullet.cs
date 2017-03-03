@@ -12,6 +12,8 @@ public class Bullet : Bullet_Base {
 
     [SerializeField]
     private LineRenderer lineRenderer;
+    [SerializeField]
+    float maxBulletTrailLength = 25;
 
 
     Vector3 spawnPoint;
@@ -21,8 +23,6 @@ public class Bullet : Bullet_Base {
 
     [SerializeField]
     private float bulletDamageAmount = 36;
-
-    bool beingDestroyed;
 
 
     private HitMarkerCallback hitMarkerCallback;
@@ -77,6 +77,7 @@ public class Bullet : Bullet_Base {
 
         enabled = false;
         lineRenderer.enabled = false;
+        
     }
 
     public override void SetHitMarkerCallBack(HitMarkerCallback callback)
@@ -91,15 +92,20 @@ public class Bullet : Bullet_Base {
 
     void Update()
     {
-        if(transform.position.y < 1 && !beingDestroyed)
-        {
-            beingDestroyed = true;
-            Destroy(gameObject, 120);
-        }
+        SetTrailPosition();
+    }
 
-        float distance = Mathf.Clamp(Vector3.Distance(spawnPoint, transform.position), 0, 25);
+    private void SetTrailPosition(){
+        ///
+        /// Make the bullet trail go back toward its spawn point
+        ///
+        float distance = Vector3.Distance(spawnPoint, transform.position);
+        float clamped = Mathf.Clamp(distance, 0, maxBulletTrailLength);
+        float percent = clamped / distance;
+
+        Vector3 endPoint = Vector3.Lerp(transform.position, spawnPoint, percent);
 
         lineRenderer.SetPosition(1, transform.position);
-        lineRenderer.SetPosition(0, transform.position + transform.forward * -distance );
+        lineRenderer.SetPosition(0, endPoint );
     }
 }

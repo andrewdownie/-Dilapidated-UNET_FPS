@@ -171,9 +171,13 @@ public class Gun : Gun_Base {
             Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
             
             Vector3 point = hit.point;
-            
+
+            if(point == Vector3.zero){
+                point = camera.forward * 100000;
+            }
             alignObject.LookAt(point);
             alignObject.Rotate(additionalRotation);
+            
         }
     }
 
