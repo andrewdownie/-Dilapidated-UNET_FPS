@@ -56,7 +56,7 @@ public class Shotgun : Gun_Base {
     private Shell_Base shellPrefab;
 
     [SerializeField]
-    private ParticleSystem muzzleFlash;
+    private MuzzleFlash_Base muzzleFlash;
 
     [SerializeField]
     HitMarkerCallback hitMarkerCallback;
@@ -184,18 +184,22 @@ public class Shotgun : Gun_Base {
     } 
 
 
-      public override void Align(Transform alignObject, Vector3 additionalRotation){
+    public override void Align(Transform alignObject, Vector3 additionalRotation){
 
         if(player != null){
             Transform camera = transform.parent.parent;
             RaycastHit hit;
-            Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
+            //Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
             Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
             
             Vector3 point = hit.point;
-            
+
+            if(point == Vector3.zero){
+                point = camera.forward * 100000;
+            }
             alignObject.LookAt(point);
             alignObject.Rotate(additionalRotation);
+            
         }
     }
 
@@ -238,15 +242,14 @@ public class Shotgun : Gun_Base {
 					bullet.transform.position = bulletSpawnPoint.position;
 					bullet.transform.rotation = bulletSpawnPoint.rotation;
 					bullet.SetHitMarkerCallBack(hitMarkerCallback);
+                    bullet.InitBulletTrail(bullet.transform.position);
                     bullet.SetupBulletVelocity(i == 0);
 
                     //Align(bullet.transform, bulletSpawnPoint.rotation.eulerAngles);
 				}
 
-				Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
-				t.position = bulletSpawnPoint.position;
-				t.rotation = bulletSpawnPoint.rotation;
-				t.parent = bulletSpawnPoint;
+                muzzleFlash.ShowFlash();
+
                 ///
                 /// Create the shell
                 ///

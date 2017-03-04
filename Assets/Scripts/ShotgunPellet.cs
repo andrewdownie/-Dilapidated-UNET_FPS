@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotgunPellet : MonoBehaviour {
+public class ShotgunPellet : Bullet_Base {
+
+    [SerializeField]
+    private float maxBulletTrailLength;
     
     [SerializeField]
     private float initialBulletForce = 500;
@@ -17,12 +20,17 @@ public class ShotgunPellet : MonoBehaviour {
     [SerializeField]
     private float bulletDamageAmount = 36;
 
+    [SerializeField]
+    private LineRenderer lineRenderer;
+
     bool beingDestroyed;
 
 
     private HitMarkerCallback hitMarkerCallback;
 
     private Rigidbody rigid;
+
+    Vector3 spawnPoint;
     
 
 	//TODO: move this to abstract method in Bullet_Base class
@@ -44,6 +52,8 @@ public class ShotgunPellet : MonoBehaviour {
 		}
 
         rigid.AddForce(force, ForceMode.Impulse);
+        lineRenderer.enabled = true;
+        Destroy(gameObject, 10f);
 	}
 
 
@@ -60,24 +70,39 @@ public class ShotgunPellet : MonoBehaviour {
 
             hitMarkerCallback.ConfirmHit();
         }
+
+        enabled = false;
+        lineRenderer.enabled = false;
     }
 
 
 
-    void FixedUpdate()
-    {
-        if(transform.position.y < 1 && !beingDestroyed)
-        {
-            beingDestroyed = true;
-            Destroy(gameObject, 120);
-        }
-    }
 
 
-    public void SetHitMarkerCallBack(HitMarkerCallback callback)
+    public override void SetHitMarkerCallBack(HitMarkerCallback callback)
     {
         hitMarkerCallback = callback;
     }
 
+    public override void InitBulletTrail(Vector3 spawnPoint){
+        this.spawnPoint = spawnPoint;
+    }
+
+    void Update(){
+        SetTrailPosition();
+    }
+    private void SetTrailPosition(){
+        ///
+        /// Make the bullet trail go back toward its spawn point
+        ///
+        float distance = Vector3.Distance(spawnPoint, transform.position);
+        float clamped = Mathf.Clamp(distance, 0, maxBulletTrailLength);
+        float percent = clamped / distance;
+
+        Vector3 endPoint = Vector3.Lerp(transform.position, spawnPoint, percent);
+
+        lineRenderer.SetPosition(1, transform.position);
+        lineRenderer.SetPosition(0, endPoint );
+    }
 
 }
