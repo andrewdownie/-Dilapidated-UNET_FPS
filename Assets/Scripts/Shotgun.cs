@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //TODO: replace player reference, to indirect references through GunSlot
 public class Shotgun : Gun_Base {
@@ -215,8 +216,8 @@ public class Shotgun : Gun_Base {
 
     }
 
-
-    public override void Shoot(bool firstDown){
+    [Command]
+    public override void CmdShoot(bool firstDown){
         if(!automatic && !firstDown){
             return;
         }
