@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.Networking;
 
 //TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base {
@@ -124,14 +123,9 @@ public class Gun : Gun_Base {
 
     void OnTriggerEnter(Collider coll)
     {
-       /* if(!isServer){
-            return;
-        }*/
-
         if (coll.tag == "Player" && player == null)
         {
             Debug.Log("Collided with: " + coll.name);
-            
 
             Player_Base _player = coll.GetComponent<Player_Base>();
             if (_player != null)
@@ -140,11 +134,6 @@ public class Gun : Gun_Base {
 
                 if (_gunSlot != null && _gunSlot.TryPickup(this))
                 {
-                    if(isServer){
-                        NetworkConnection playerConn = _player.GetComponent<NetworkIdentity>().clientAuthorityOwner;
-                        GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
-                    }
-
                     player = _player;
                     gunSlot = _gunSlot;
                     gameObject.transform.parent = _gunSlot.transform;
@@ -194,26 +183,17 @@ public class Gun : Gun_Base {
 
 
     public override void AlignGun(){
-        FindGunSlotAndPlayer();
-
         if(player != null){
-            Debug.Log("AlignGun: player was found");
             Transform camera = transform.parent.parent;
             Vector3 point = camera.position + (camera.forward * 10000);
 
             transform.LookAt(point);
             transform.Rotate(new Vector3(0, 90, 0));
-            transform.parent = gunSlot.transform;
-            transform.localPosition = Vector3.zero;
-        }
-        else{
-            Debug.Log("AlignGun: player is null");
         }
 
     }
 
-    private void Shoot(bool firstDown){
-
+    public override void Shoot(bool firstDown){
         if(!automatic && !firstDown){
             return;
         }
@@ -259,17 +239,6 @@ public class Gun : Gun_Base {
             }
 
         }
-    }
-
-    [ClientRpc]
-    private void RpcShoot(bool firstDown){
-       Shoot(firstDown); 
-    }
-
-    [Command]
-    public override void CmdShoot(bool firstDown){
-        //Shoot(firstDown);
-        RpcShoot(firstDown);
     }
 
     public override void Reload(){

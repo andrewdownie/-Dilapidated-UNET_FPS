@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using UnityEngine.Networking;
 
 
 /// <summary>
@@ -24,46 +23,9 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory_Base ammo;
 
-
-    [SerializeField]
-    private Gun_Base startingGunPrefab;
-
     void Start(){
-        Debug.Log("Player start");
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
         gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
-
-
-        ///
-        /// Create the players starting gun
-        ///
-        if(isServer){
-            Gun_Base spawnSecondary = (Gun_Base)Instantiate(startingGunPrefab, Vector3.zero, Quaternion.Euler(0, 90, 0)).GetComponent<Gun_Base>();
-            NetworkServer.Spawn(spawnSecondary.gameObject); 
-
-            NetworkConnection playerConn = GetComponent<NetworkIdentity>().clientAuthorityOwner;
-            spawnSecondary.GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
-
-            NetworkInstanceId id = spawnSecondary.GetComponent<NetworkIdentity>().netId;
-            RpcSetupSecondary(id);
-            SetupSecondary(id);
-        }
-    }
-        
-    
-
-    [ClientRpc]
-    void RpcSetupSecondary(NetworkInstanceId id){
-        SetupSecondary(id);
-    }
-
-    void SetupSecondary(NetworkInstanceId id){
-        GameObject go = ClientScene.FindLocalObject(id);
-        Gun_Base secondaryGun = go.GetComponent<Gun_Base>();
-
-        secondaryGun.transform.parent = gunSlot.transform;
-        secondaryGun.transform.localPosition = Vector3.zero;
-        gunSlot.SetStartingGun(secondaryGun);
     }
 
     public override Vitals_Base Vitals{
@@ -98,18 +60,13 @@ public class Player : Player_Base {
     }
 
     private void CB_AmmoInventory(){
-        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType));         
+        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); //TODO: change GetGunType() to getter
         HUD.SetClipAmmo(gunSlot.EquippedGun.BulletsInClip, gunSlot.EquippedGun.ClipSize);
-
     }
 
 
     void Update()
     {
-        if(!isLocalPlayer){
-            return;
-        }
-
         if (Input.GetKeyDown(KeyCode.H))
         {
             vitals.UseHealthpack();

@@ -10,21 +10,15 @@ public class SetupLocalPlayer : SetupLocalPlayer_Base {
 	[SerializeField]
 	Camera camer_a;
 
-	[ClientRpc]
-	public override void RpcSetup(){
+	[TargetRpc]
+	public override void TargetSetup(NetworkConnection conn){
 		Debug.Log("Setup local player");
 		NetworkIdentity netId = GetComponent<NetworkIdentity>();
 
-		if(netId.hasAuthority){
-			foreach(Behaviour b in behavioursToEnable){
-				b.enabled = true;	
-			}
-		}		
+		foreach(Behaviour b in behavioursToEnable){
+			b.enabled = true;	
+		}
 		
-
-
-
-
 
 	}
 

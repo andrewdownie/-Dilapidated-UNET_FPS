@@ -15,7 +15,7 @@ public class Net_Manager : NetworkManager{
 
         SetupLocalPlayer slp = newPlayer.GetComponent<SetupLocalPlayer>();
 
-        slp.RpcSetup();
+        slp.TargetSetup(conn);
 
     }
 }

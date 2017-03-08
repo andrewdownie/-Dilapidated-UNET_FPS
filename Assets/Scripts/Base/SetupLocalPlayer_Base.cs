@@ -4,6 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public abstract class SetupLocalPlayer_Base : NetworkBehaviour {
-	[ClientRpc]
-	public abstract void RpcSetup();
+	[TargetRpc]
+	public abstract void TargetSetup(NetworkConnection conn);
 }
