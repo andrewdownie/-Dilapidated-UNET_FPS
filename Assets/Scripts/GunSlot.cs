@@ -22,7 +22,7 @@ public class GunSlot : GunSlot_Base {
 
 	// Use this for initialization
 	void Start () {
-        /*if(primaryGun != null){
+        if(primaryGun != null){
             Debug.Log("Primary weapon is null");
             equippedGun = primaryGun;
             secondaryGun.gameObject.SetActive(false);
@@ -33,13 +33,9 @@ public class GunSlot : GunSlot_Base {
         equippedGun.gameObject.SetActive(true);        
         equippedGun.AlignGun();
 
-<<<<<<< HEAD
        // CB_AmmoChanged();/////////////////////////TODO: NULL ATM due to networking
-=======
-        CB_AmmoChanged();*/
 
 
->>>>>>> b9a28da6ed52c59adc0f9276b6cbcf481d426104
     }
 
     public override void Drop(){
