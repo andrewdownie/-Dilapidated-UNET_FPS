@@ -32,7 +32,7 @@ public class GunSlot : GunSlot_Base {
         equippedGun.gameObject.SetActive(true);        
         equippedGun.AlignGun();
 
-        CB_AmmoChanged();
+       // CB_AmmoChanged();/////////////////////////TODO: NULL ATM due to networking
     }
 	
     public override void Drop(){

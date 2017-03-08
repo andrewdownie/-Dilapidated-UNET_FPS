@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\Base\HUD_Base.cs" />
      <Compile Include="Assets\Scripts\Base\MuzzleFlash_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Player_Base.cs" />
+     <Compile Include="Assets\Scripts\Base\SetupLocalPlayer_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Shell_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Vitals_Base.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
@@ -67,12 +68,12 @@
      <Compile Include="Assets\Scripts\HealthPack.cs" />
      <Compile Include="Assets\Scripts\HideGameObject.cs" />
      <Compile Include="Assets\Scripts\HitMarkerCallback.cs" />
-     <Compile Include="Assets\Scripts\LocalSetup.cs" />
      <Compile Include="Assets\Scripts\MuzzleFlash.cs" />
      <Compile Include="Assets\Scripts\Net_Manager.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\RandomColor.cs" />
+     <Compile Include="Assets\Scripts\SetupLocalPlayer.cs" />
      <Compile Include="Assets\Scripts\Shell.cs" />
      <Compile Include="Assets\Scripts\Shotgun.cs" />
      <Compile Include="Assets\Scripts\ShotgunPellet.cs" />
