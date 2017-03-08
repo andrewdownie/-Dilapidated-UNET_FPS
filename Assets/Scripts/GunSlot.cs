@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Networking;
 
 public class GunSlot : GunSlot_Base {
 
@@ -16,12 +17,12 @@ public class GunSlot : GunSlot_Base {
     private Gun_Base secondaryGun;
 
 
+
     private Gun_Base equippedGun;
 
 	// Use this for initialization
 	void Start () {
-
-        if(primaryGun != null){
+        /*if(primaryGun != null){
             Debug.Log("Primary weapon is null");
             equippedGun = primaryGun;
             secondaryGun.gameObject.SetActive(false);
@@ -32,9 +33,15 @@ public class GunSlot : GunSlot_Base {
         equippedGun.gameObject.SetActive(true);        
         equippedGun.AlignGun();
 
+<<<<<<< HEAD
        // CB_AmmoChanged();/////////////////////////TODO: NULL ATM due to networking
+=======
+        CB_AmmoChanged();*/
+
+
+>>>>>>> b9a28da6ed52c59adc0f9276b6cbcf481d426104
     }
-	
+
     public override void Drop(){
         if(primaryGun != null && equippedGun != secondaryGun)
         {
@@ -86,6 +93,13 @@ public class GunSlot : GunSlot_Base {
         equippedGun.AlignGun();
     }
 
+    public override void SetStartingGun(Gun_Base gun){
+        secondaryGun = gun;
+        equippedGun = secondaryGun;
+        equippedGun.AlignGun();
+        CB_AmmoChanged();
+    }
+
 
     public override void Reload(){
         equippedGun.Reload();
@@ -94,7 +108,7 @@ public class GunSlot : GunSlot_Base {
 
 
     public override void Shoot(bool firstDown){
-        equippedGun.Shoot(firstDown);
+        equippedGun.CmdShoot(firstDown);
         CB_AmmoChanged();
     }
 
