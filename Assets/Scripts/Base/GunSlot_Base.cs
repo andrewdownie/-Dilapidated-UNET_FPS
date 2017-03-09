@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Networking;
 
-public abstract class GunSlot_Base : MonoBehaviour {
+public abstract class GunSlot_Base : NetworkBehaviour {
 
 	/// <summary>
 	/// TryPickup: the weapon slot will try to take ownership of the gun passed in.
@@ -53,4 +54,9 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	public abstract Gun_Base EquippedGun{get;}
 
 	public abstract Player Player{get;}
+
+
+	public abstract void AddStartingGun(NetworkInstanceId gunId);
+
+
 }

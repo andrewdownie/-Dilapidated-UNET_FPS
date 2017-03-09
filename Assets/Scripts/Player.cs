@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Networking;
 
 
 /// <summary>
@@ -90,9 +91,15 @@ public class Player : Player_Base {
         /// Handle shooting
         ///
         if(Input.GetKey(KeyCode.Mouse0)){
+            Debug.Log("Shoot pls");
             gunSlot.Shoot(Input.GetKeyDown(KeyCode.Mouse0));
         } 
                 
         
+    }
+
+    [ClientRpc]
+    public override void RpcAddStartingGun(NetworkInstanceId gunid){
+        gunSlot.AddStartingGun(gunid);
     }
 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Networking;
 
-public abstract class AmmoInventory_Base : MonoBehaviour {
+public abstract class AmmoInventory_Base : NetworkBehaviour {
 	public abstract int Count(GunType gunType);
 
 	public abstract void Add(GunType gunType, int ammoAmount);	

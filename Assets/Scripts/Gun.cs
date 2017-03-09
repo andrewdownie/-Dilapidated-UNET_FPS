@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 //TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base {
@@ -193,7 +194,8 @@ public class Gun : Gun_Base {
 
     }
 
-    public override void Shoot(bool firstDown){
+    private void Shoot(bool firstDown){
+
         if(!automatic && !firstDown){
             return;
         }
@@ -208,7 +210,7 @@ public class Gun : Gun_Base {
                 ///
                 /// Create the bullet
                 ///
-                player.AudioSource.PlayOneShot(shoot);
+//                player.AudioSource.PlayOneShot(shoot);/////////////////////////////////////////////////////////
                 bulletsInClip -= 1;
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
@@ -229,7 +231,7 @@ public class Gun : Gun_Base {
                 /// Create the shell
                 ///
                 Shell_Base shell = (Shell_Base)Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
-                shell.AddVelocity(player.Rigidbody.velocity);
+                //shell.AddVelocity(player.Rigidbody.velocity);////////////////////////////////////////////////////////////////
            
             
             }
@@ -239,6 +241,17 @@ public class Gun : Gun_Base {
             }
 
         }
+    }
+
+    [Command]
+    public override void CmdShoot(bool firstDown){
+        RpcShoot(firstDown);
+        Shoot(firstDown);
+    }
+
+    [ClientRpc]
+    private void RpcShoot(bool firstDown){
+        Shoot(firstDown);
     }
 
     public override void Reload(){

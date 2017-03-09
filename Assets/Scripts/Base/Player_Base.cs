@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public abstract class Player_Base : MonoBehaviour {
+public abstract class Player_Base : NetworkBehaviour {
 	public abstract void PickupAmmo(GunType gunType, int amount);
 
 
@@ -18,5 +19,9 @@ public abstract class Player_Base : MonoBehaviour {
 
 
 	public abstract Rigidbody Rigidbody{get;}
+
+
+	[ClientRpc]
+	public abstract void RpcAddStartingGun(NetworkInstanceId gunId);
 
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Networking;
 
 public class GunSlot : GunSlot_Base {
 
@@ -16,11 +17,12 @@ public class GunSlot : GunSlot_Base {
     private Gun_Base secondaryGun;
 
 
+    [SerializeField]
     private Gun_Base equippedGun;
 
 	// Use this for initialization
 	void Start () {
-
+        return;/////////////////////////////////////
         if(primaryGun != null){
             Debug.Log("Primary weapon is null");
             equippedGun = primaryGun;
@@ -94,7 +96,10 @@ public class GunSlot : GunSlot_Base {
 
 
     public override void Shoot(bool firstDown){
-        equippedGun.Shoot(firstDown);
+        if(equippedGun == null){
+            Debug.Log("Equipped gun is null");
+        }
+        equippedGun.CmdShoot(firstDown);
         CB_AmmoChanged();
     }
 
@@ -121,4 +126,18 @@ public class GunSlot : GunSlot_Base {
     public override Player Player{
         get{return player;}
     }
+
+    
+    public override void AddStartingGun(NetworkInstanceId gunId){
+        Gun_Base startingGun = ClientScene.FindLocalObject(gunId).GetComponent<Gun_Base>();
+
+        secondaryGun = startingGun;
+        equippedGun = secondaryGun;
+        startingGun.transform.parent = player.GunSlot.transform;
+        startingGun.transform.localPosition = Vector3.zero;
+        startingGun.transform.localRotation = Quaternion.Euler(0, 90, 0);
+        equippedGun.AlignGun();
+    }
+
+
 }
